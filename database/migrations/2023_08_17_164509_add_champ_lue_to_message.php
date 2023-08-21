@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('inscription', function (Blueprint $table) {
-            $table->id();
-            $table->datetime('date_inscription');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
-    });
+        Schema::table('message', function (Blueprint $table) {
+            //
+            $table->boolean('etat');
+        });
     }
 
     /**
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('message', function (Blueprint $table) {
+            //
+        });
     }
 };

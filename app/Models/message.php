@@ -13,7 +13,8 @@ class message extends Model
         'date_message',
         'objet_message',
         'contenu',
-        'famille_id'
+        'famille_id',
+        'etat'
 
     ];
     public function classe()

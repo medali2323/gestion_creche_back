@@ -90,4 +90,49 @@ class documentController extends Controller
      
        
      }
-}
+
+     public function update(documentStoreRequest $request, $id)
+     {
+         try {
+             // Find document
+             $document = document::find($id);
+             if(!$document){
+               return response()->json([
+                 'message'=>'document Not Found.'
+               ],404);
+             }
+      
+             $document->nom = $request->nom;
+             $document->description = $request->description;
+      
+             if($request->image) {
+                 // Public storage
+                 $storage = Storage::disk('public/upload');
+      
+                 // Old iamge delete
+                 if($storage->exists($document->image))
+                     $storage->delete($document->image);
+      
+                 // Image name
+                 $imageName = Str::random(32).".".$request->image->getClientOriginalExtension();
+                 $document->image = $imageName;
+      
+                 // Image save in public folder
+                 $storage->put($imageName, file_get_contents($request->image));
+             }
+      
+             // Update document
+             $document->save();
+      
+             // Return Json Response
+             return response()->json([
+                 'message' => "document successfully updated."
+             ],200);
+         } catch (\Exception $e) {
+             // Return Json Response
+             return response()->json([
+                 'message' => "Something went really wrong!"
+             ],500);
+         }
+     }
+    }

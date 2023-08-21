@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RepasController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\MediaController;
 use App\Http\Controllers\api\EnfantController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\api\FamilleController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
 use App\Http\Controllers\PaimentEnfantController;
+use App\Http\Controllers\PointageEnfantController;
 use App\Http\Controllers\api\inscriptionController;
 use App\Http\Controllers\api\anneescolaireController;
 use App\Http\Controllers\api\employeEnfantController;
@@ -25,15 +27,17 @@ use App\Http\Controllers\api\activiteEnfantController;
 |
 */
 Route::middleware('auth:sanctum','role:admin')->group( function () {
-   Route::get('enfants', [EnfantController::class, 'index']);
 
   
  });
    //Route of enfants
+ Route::get('enfants', [EnfantController::class, 'index']);
  Route::get('enfants/{id}', [EnfantController::class, 'getById']);
  Route::get('enfants/{id}/media', [MediaController::class, 'mediaforenfant']);
  Route::get('enfants/{id}/document', [documentController::class, 'documentforenfant']);
  Route::get('enfants/{id}/activite', [activiteEnfantController::class, 'activiteforenfant']);
+ Route::get('enfants/{id}/pointage', [PointageEnfantController::class, 'pointageforenfant']);
+
  Route::post('enfants', [EnfantController::class, 'ajouter']);
  Route::put('enfants/{id}/edit', [EnfantController::class, 'update']);
  Route::delete('enfants/{id}/delete', [EnfantController::class, 'delete']);
@@ -60,6 +64,14 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::get('inscription/{id}', [inscriptionController::class, 'getById']);
  Route::put('inscription/{id}/edit', [inscriptionController::class, 'update']);
  Route::delete('inscription/{id}/delete', [inscriptionController::class, 'delete']);
+
+  //Route of Repas
+ 
+  Route::get('Repas', [RepasController::class, 'index']);
+  Route::post('Repas', [RepasController::class, 'ajouter']);
+  Route::get('Repas/{id}', [RepasController::class, 'getById']);
+  Route::put('Repas/{id}/edit', [RepasController::class, 'update']);
+  Route::delete('Repas/{id}/delete', [RepasController::class, 'delete']);
  //Route of PaimentEnfant
  
  Route::get('PaimentEnfant', [PaimentEnfantController::class, 'index']);
@@ -97,6 +109,15 @@ Route::post('activite_enfant', [activiteEnfantController::class, 'ajouter']);
 Route::get('activite_enfant/{id}', [activiteEnfantController::class, 'getById']);
 Route::put('activite_enfant/{id}/edit', [activiteEnfantController::class, 'update']);
 Route::delete('activite_enfant/{id}/delete', [activiteEnfantController::class, 'delete']);
+
+
+//Route of pointage_enfant
+ 
+Route::get('pointage_enfant', [PointageEnfantController::class, 'index']);
+Route::post('pointage_enfant', [PointageEnfantController::class, 'ajouter']);
+Route::get('pointage_enfant/{id}', [PointageEnfantController::class, 'getById']);
+Route::put('pointage_enfant/{id}/edit', [PointageEnfantController::class, 'update']);
+Route::delete('pointage_enfant/{id}/delete', [PointageEnfantController::class, 'delete']);
 
 //Route of employe_enfant
  

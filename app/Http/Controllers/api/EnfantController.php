@@ -44,16 +44,46 @@ class EnfantController extends Controller
      
        
      }
+     public function exist($nom,$prenom,$famille_id,$dateness)  {
+        $enfants= enfant::where([
+            ['non',$nom],
+            ['prenom',$prenom],
+            ['famille_id',$famille_id],
+            ['dateness',$dateness],
+
+        ])->get();
+        if($enfants->count()>0)
+         return true;
+        else 
+        return false;
+     
+     
+       
+     }
     public function ajouter(Request $request){
      $validator= Validator::make($request->all(),[
         'nom'=>'required|string|max:50',
         'prenom'=>'required|string|max:50',
         'dateness'=>'required',
+        'etat_medical'=>'required',
+        'adresse'=>'required',
+
         'famille_id'=>'required',
 
 
+
      ]); 
-        if ($validator->fails()) {
+      // Vérification si l'enfant existe déjà
+      $existingEnfant = Enfant::where('nom', $request->nom)
+      ->where('prenom', $request->prenom)
+      ->where('dateness', $request->dateness)
+      ->where('famille_id', $request->famille_id)
+
+      ->first();
+      if ($existingEnfant) {
+        return response()->json(['message' => 'Cet enfant existe déjà']);
+    }else {
+        if ($validator->fails() )  {
             return response()->json([
                 'status'=>422,
                 'ERRORRS'=>$validator->messages() 
@@ -62,15 +92,20 @@ class EnfantController extends Controller
             $nom = $request->input('nom');
             $prenom = $request->input('prenom');
             $dateness = $request->input('dateness');
+            $etat_medical = $request->input('etat_medical');
+            $adresse = $request->input('adresse');
+
             $famille_id = $request->input('famille_id');
 
             // Create a new instance of the Enfant model
             $enfant = new Enfant();
-    
             // Set the values of the model attributes
             $enfant->nom = $nom;
             $enfant->prenom = $prenom;
             $enfant->dateness = $dateness;
+            $enfant->etat_medical = $etat_medical;
+            $enfant->adresse = $adresse;
+
             $enfant->famille_id = $famille_id;
 
             $enfant->updated_at = now();
@@ -90,6 +125,8 @@ class EnfantController extends Controller
                    ],500);
             }
         }
+    }
+      
     }
     public function getById($id){
      $enfant = Enfant::find($id);
@@ -126,6 +163,9 @@ return response()->json($enfant, 200);
     $enfant->nom = $request->input('nom');
     $enfant->prenom = $request->input('prenom');
     $enfant->dateness = $request->input('dateness');
+    $enfant->etat_medical = $request->input('etat_medical');
+    $enfant->adresse = $request->input('adresse');
+
     $enfant->famille_id = $request->input('famille_id');
 
     // Sauvegarder les modifications

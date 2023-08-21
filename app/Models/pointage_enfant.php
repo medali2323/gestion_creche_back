@@ -5,19 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inscription extends Model
+class pointage_enfant extends Model
 {
     use HasFactory;
-    protected $table='inscription';
+    protected $table='pointage_enfant';
+
     protected $fillable =[
-       'date_inscription',
-        'anneescolaire_id',
+        'nom_activite',
+        'datepointage',
+        'heurepointage',
+        'enfant_id',
+        'employe_enfant_id',
         'enfant_id'
 
     ];
-    public function classe()
-{
-    return $this->belongsTo(Classe::class);
 }
-}
- 

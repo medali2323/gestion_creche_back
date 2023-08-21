@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('paiment_enfant', function (Blueprint $table) {
             $table->id();
+            $table->datetime('date_paiment');
+            $table->decimal('montant_paiment', 10, 2);
             $table->unsignedBigInteger('inscription_id')->nullable(); $table->foreign('inscription_id')->references('id')->on('inscription');
-            $table->unsignedBigInteger('type_paiment_id')->nullable();$table->foreign('type_paiment_id')->references('id')->on('type_paiment');  
             $table->unsignedBigInteger('mode_paiment_id')->nullable();$table->foreign('mode_paiment_id')->references('id')->on('mode_paiment');
             $table->timestamps();
         });

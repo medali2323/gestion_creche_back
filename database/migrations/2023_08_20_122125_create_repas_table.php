@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('inscription', function (Blueprint $table) {
+        Schema::create('repas', function (Blueprint $table) {
             $table->id();
-            $table->datetime('date_inscription');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
-    });
+            $table->string('libelle');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('repas');
     }
 };

@@ -29,10 +29,18 @@ class FamilleController extends Controller
     }
     public function ajouter(Request $request){
      $validator= Validator::make($request->all(),[
-        'nom_parent'=>'required|string|max:50',
-        'prenom_parent'=>'required|string|max:50',
-        'numero_telephone'=>'required|max:8',
-        'numero_cin'=>'required|max:8',
+        'nom_pere'=>'required|string|max:50',
+        'prenom_pere'=>'required|string|max:50',
+        'numero_telephone_pere_pere'=>'required|max:8',
+        'numero_cin_pere '=>'required|max:8',
+        'email_pere'=>'required|email',
+        'adresse_pere'=>'required',
+        'nom_mere'=>'required|string|max:50',
+        'prenom_mere'=>'required|string|max:50',
+        'numero_telephone_mere'=>'required|max:8',
+        'numero_cin_mere'=>'required|max:8',
+        'email_mere'=>'required|email',
+        'adresse_mere'=>'required'
 
      ]); 
         if ($validator->fails()) {
@@ -41,19 +49,37 @@ class FamilleController extends Controller
                 'ERRORRS'=>$validator->messages() 
                ],422);
         }else {
-            $nom_parent = $request->input('nom_parent');
-            $prenom_parent = $request->input('prenom_parent');
-            $numero_telephone = $request->input('numero_telephone');
-            $numero_cin = $request->input('numero_cin');
+            $nom_pere = $request->input('nom_pere');
+            $prenom_pere = $request->input('prenom_pere');
+            $numero_telephone_pere = $request->input('numero_telephone_pere');
+            $numero_cin_pere = $request->input('numero_cin_pere');
+            $email_pere = $request->input('email_pere');
+            $adresse_pere = $request->input('adresse_pere');
 
+            $nom_mere = $request->input('nom_mere');
+            $prenom_mere = $request->input('prenom_mere');
+            $numero_telephone_mere = $request->input('numero_telephone_mere');
+            $numero_cin_mere = $request->input('numero_cin_mere');
+            $email_mere = $request->input('email_mere');
+            $adresse_mere = $request->input('adresse_mere');
             // Create a new instance of the famille model
             $famille = new famille();
     
             // Set the values of the model attributes
-            $famille->nom_parent = $nom_parent;
-            $famille->prenom_parent = $prenom_parent;
-            $famille->numero_telephone = $numero_telephone;
-            $famille->numero_cin = $numero_cin;
+            $famille->nom_pere = $nom_pere;
+            $famille->prenom_pere = $prenom_pere;
+            $famille->numero_telephone_pere = $numero_telephone_pere;
+            $famille->numero_cin_pere = $numero_cin_pere;
+            $famille->email_pere = $email_pere;
+            $famille->adresse_pere = $adresse_pere;
+
+            $famille->nom_mere = $nom_mere;
+            $famille->prenom_mere = $prenom_mere;
+            $famille->numero_telephone_mere = $numero_telephone_mere;
+            $famille->numero_cin_mere = $numero_cin_mere;
+            $famille->email_mere = $email_mere;
+            $famille->adresse_mere = $adresse_mere;
+
             $famille->updated_at = now();
             $famille->created_at = now();
     
@@ -88,10 +114,18 @@ return response()->json($famille, 200);
 {
     // Valider les données du formulaire de mise à jour
     $request->validate([
-        'nom_parent'=>'required|string|max:50',
-        'prenom_parent'=>'required|string|max:50',
-        'numero_telephone'=>'required|max:8',
-        'numero_cin'=>'required|max:8',
+        'nom_pere'=>'required|string|max:50',
+        'prenom_pere'=>'required|string|max:50',
+        'numero_telephone_pere_pere'=>'required|max:8',
+        'numero_cin_pere '=>'required|max:8',
+        'email_pere'=>'required|email',
+        'adresse_pere'=>'required',
+        'nom_mere'=>'required|string|max:50',
+        'prenom_mere'=>'required|string|max:50',
+        'numero_telephone_mere'=>'required|max:8',
+        'numero_cin_mere'=>'required|max:8',
+        'email_mere'=>'required|email',
+        'adresse_mere'=>'required'
 
     ]);
 
@@ -104,10 +138,20 @@ return response()->json($famille, 200);
     }
 
     // Mettre à jour les champs avec les nouvelles valeurs
-    $famille->nom_parent = $nom_parent;
-    $famille->prenom_parent = $prenom_parent;
-    $famille->numero_telephone = $numero_telephone;
-    $famille->numero_cin = $numero_cin;
+    $famille->nom_pere = $nom_pere;
+    $famille->prenom_pere = $prenom_pere;
+    $famille->numero_telephone_pere = $numero_telephone_pere;
+    $famille->numero_cin_pere = $numero_cin_pere;
+    $famille->email_pere = $email_pere;
+    $famille->adresse_pere = $adresse_pere;
+
+    $famille->nom_mere = $nom_mere;
+    $famille->prenom_mere = $prenom_mere;
+    $famille->numero_telephone_mere = $numero_telephone_mere;
+    $famille->numero_cin_mere = $numero_cin_mere;
+    $famille->email_mere = $email_mere;
+    $famille->adresse_mere = $adresse_mere;
+    $famille->updated_at = now();
 
     // Sauvegarder les modifications
     $famille->save();

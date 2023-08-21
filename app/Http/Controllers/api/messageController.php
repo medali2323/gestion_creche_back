@@ -33,6 +33,7 @@ class messageController extends Controller
         'objet_message'=>'required|string|max:50',
         'contenu'=>'required|string|max:50',
         'famille_id'=>'required',
+        'etat'=>'required',
 
 
      ]); 
@@ -46,6 +47,8 @@ class messageController extends Controller
             $objet_message = $request->input('objet_message');
             $contenu = $request->input('contenu');
             $famille_id = $request->input('famille_id');
+            $etat = $request->input('etat');
+
 
             // Create a new instance of the message model
             $message = new message();
@@ -55,6 +58,7 @@ class messageController extends Controller
             $message->objet_message = $objet_message;
             $message->contenu = $contenu;
             $message->famille_id = $famille_id;
+            $message->etat = $etat;
 
             $message->updated_at = now();
             $message->created_at = now();
@@ -94,6 +98,7 @@ return response()->json($message, 200);
         'objet_message'=>'required|string|max:50',
         'contenu'=>'required|string|max:50',
         'famille_id'=>'required',
+        'etat'=>'required',
 
     ]);
 
@@ -110,6 +115,7 @@ return response()->json($message, 200);
     $message->objet_message = $request->input('objet_message');
     $message->contenu = $request->input('contenu');
     $message->famille_id = $request->input('famille_id');
+    $etat = $request->input('etat');
 
     // Sauvegarder les modifications
     $message->save();
