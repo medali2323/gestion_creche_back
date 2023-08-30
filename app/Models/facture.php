@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class facture extends Model
 {
     use HasFactory;
+    protected $table='facture';
+    protected $fillable =[
+        'code',
+        'montant_total',
+        'date_facturation',
+        'tva_id'
+
+    ];
 }

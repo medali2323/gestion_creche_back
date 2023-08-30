@@ -28,27 +28,28 @@ class FamilleController extends Controller
       
     }
     public function ajouter(Request $request){
-     $validator= Validator::make($request->all(),[
-        'nom_pere'=>'required|string|max:50',
-        'prenom_pere'=>'required|string|max:50',
-        'numero_telephone_pere_pere'=>'required|max:8',
-        'numero_cin_pere '=>'required|max:8',
-        'email_pere'=>'required|email',
-        'adresse_pere'=>'required',
-        'nom_mere'=>'required|string|max:50',
-        'prenom_mere'=>'required|string|max:50',
-        'numero_telephone_mere'=>'required|max:8',
-        'numero_cin_mere'=>'required|max:8',
-        'email_mere'=>'required|email',
-        'adresse_mere'=>'required'
-
-     ]); 
+        $validator= Validator::make($request->all(),[
+            'nom_pere'=>'required|string|max:50',
+            'prenom_pere'=>'required|string|max:50',
+            'numero_telephone_pere'=>'required|max:8',
+            'numero_cin_pere'=>'required|max:8|unique:famille,numero_cin_pere',
+            'email_pere' => 'required|email|unique:famille,email_pere', 
+            'adresse_pere'=>'required',
+            'nom_mere'=>'required|string|max:50',
+            'prenom_mere'=>'required|string|max:50',
+            'numero_telephone_mere'=>'required|max:8',
+            'numero_cin_mere'=>'required|max:8|unique:famille,numero_cin_mere',
+            'email_mere' => 'required|email|unique:famille,email_mere', 
+            'adresse_mere'=>'required'
+    
+         ]); 
         if ($validator->fails()) {
             return response()->json([
                 'status'=>422,
                 'ERRORRS'=>$validator->messages() 
                ],422);
         }else {
+            
             $nom_pere = $request->input('nom_pere');
             $prenom_pere = $request->input('prenom_pere');
             $numero_telephone_pere = $request->input('numero_telephone_pere');
@@ -62,6 +63,8 @@ class FamilleController extends Controller
             $numero_cin_mere = $request->input('numero_cin_mere');
             $email_mere = $request->input('email_mere');
             $adresse_mere = $request->input('adresse_mere');
+     
+
             // Create a new instance of the famille model
             $famille = new famille();
     
@@ -88,15 +91,17 @@ class FamilleController extends Controller
             if($famille){
                 return response()->json([
                     'status'=>200,
-                    'message'=>"famille created secsusflly"
+                    'message'=>"famille created secsusflly",
+                    'idf' => $famille->id
                    ],200);
             }else{
                 return response()->json([
                     'status'=>500,
                     'message'=>"un problem quelque part"
                    ],500);
-            }
-        }
+            }     
+        
+    }
     }
     public function getById($id){
      $famille = famille::find($id);
@@ -116,8 +121,8 @@ return response()->json($famille, 200);
     $request->validate([
         'nom_pere'=>'required|string|max:50',
         'prenom_pere'=>'required|string|max:50',
-        'numero_telephone_pere_pere'=>'required|max:8',
-        'numero_cin_pere '=>'required|max:8',
+        'numero_telephone_pere'=>'required|max:8',
+        'numero_cin_pere'=>'required|max:8',
         'email_pere'=>'required|email',
         'adresse_pere'=>'required',
         'nom_mere'=>'required|string|max:50',

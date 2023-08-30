@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\api;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-class CongeController extends Controller
+class DemandeCongeController extends Controller
 {
     public function index()  {
-        $conges= conge::all();
-        if($conges->count()>0)
+        $demande_congess= demande_conges::all();
+        if($demande_congess->count()>0)
          return response()->json([
              'status'=>200,
-             'conges'=>$conges
+             'demande_congess'=>$demande_congess
             ],200);
         
         else 
          return response()->json([
              'status'=>404,
-             'conges'=>' aucun conges'
+             'demande_congess'=>' aucun demande_congess'
             ],404);
      
      
@@ -29,6 +29,7 @@ class CongeController extends Controller
          'code'=>'required|string|max:50',
          'date_deb'=>'required|date',
          'date_fin '=>'required|date',
+         'validation'=>'required',
          'employe_id'=>'required',
          
  
@@ -42,28 +43,30 @@ class CongeController extends Controller
              $code = $request->input('code');
              $date_deb = $request->input('date_deb');
              $date_fin = $request->input('date_fin');
+             $validation = $request->input('validation');
              $employe_id = $request->input('employe_id');
  
             
-             // Create a new instance of the conge model
-             $conge = new conge();
+             // Create a new instance of the demande_conges model
+             $demande_conges = new demande_conges();
      
              // Set the values of the model attributes
-             $conge->code = $code;
-             $conge->date_deb = $date_deb;
-             $conge->date_fin = $date_fin;
-             $conge->employe_id = $employe_id;
+             $demande_conges->code = $code;
+             $demande_conges->date_deb = $date_deb;
+             $demande_conges->date_fin = $date_fin;
+             $demande_conges->validation = $validation;
+             $demande_conges->employe_id = $employe_id;
  
  
-             $conge->updated_at = now();
-             $conge->created_at = now();
+             $demande_conges->updated_at = now();
+             $demande_conges->created_at = now();
      
      
-             $conge->save();
-             if($conge){
+             $demande_conges->save();
+             if($demande_conges){
                  return response()->json([
                      'status'=>200,
-                     'message'=>"conge created secsusflly"
+                     'message'=>"demande_conges created secsusflly"
                     ],200);
              }else{
                  return response()->json([
@@ -74,16 +77,16 @@ class CongeController extends Controller
          }
      }
      public function getById($id){
-      $conge = conge::find($id);
+      $demande_conges = demande_conges::find($id);
  
-      if (!$conge) {
+      if (!$demande_conges) {
          return response()->json(
              [ 'status'=>404,
-             'message' => 'conge non trouvé'
+             'message' => 'demande_conges non trouvé'
          ], 404);
   }
  
- return response()->json($conge, 200);
+ return response()->json($demande_conges, 200);
  }
      public function update(Request $request, $id)
  {
@@ -92,50 +95,52 @@ class CongeController extends Controller
         'code'=>'required|string|max:50',
         'date_deb'=>'required|date',
         'date_fin '=>'required|date',
+        'validation'=>'required',
         'employe_id'=>'required',
         
  
      ]);
  
-     // Trouver l'conge à mettre à jour
-     $conge = conge::find($id);
+     // Trouver l'demande_conges à mettre à jour
+     $demande_conges = demande_conges::find($id);
  
-     // Vérifier si l'conge existe
-     if (!$conge) {
-         return response()->json(['message' => 'conge non trouvé'], 404);
+     // Vérifier si l'demande_conges existe
+     if (!$demande_conges) {
+         return response()->json(['message' => 'demande_conges non trouvé'], 404);
      }
  
      // Mettre à jour les champs avec les nouvelles valeurs
-     $conge->code = $code;
-     $conge->date_deb = $date_deb;
-     $conge->date_fin = $date_fin;
-     $conge->employe_id = $employe_id;
+     $demande_conges->code = $code;
+     $demande_conges->date_deb = $date_deb;
+     $demande_conges->date_fin = $date_fin;
+     $demande_conges->validation = $validation;
+     $demande_conges->employe_id = $employe_id;
  
   
-     $conge->updated_at = now();
+     $demande_conges->updated_at = now();
  
      // Sauvegarder les modifications
-     $conge->save();
+     $demande_conges->save();
  
-     // Retourner la réponse avec l'conge mis à jour
+     // Retourner la réponse avec l'demande_conges mis à jour
      return response()->json([
-         'message' => 'conge mis à jour avec succès', 
-         'conge' => $conge
+         'message' => 'demande_conges mis à jour avec succès', 
+         'demande_conges' => $demande_conges
      ]);
  }
  public function delete($id)
  {
-  $conge = conge::find($id);
+  $demande_conges = demande_conges::find($id);
  
-  if (!$conge) {
+  if (!$demande_conges) {
      return response()->json(
          [ 'status'=>404,
-         'message' => 'conge non trouvé'
+         'message' => 'demande_conges non trouvé'
      ], 404);
  }else {
-     $conge->delete();
+     $demande_conges->delete();
      return response()->json([
-     'message' => 'conge supprimé avec succès'],
+     'message' => 'demande_conges supprimé avec succès'],
       200);
  }
  

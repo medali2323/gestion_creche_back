@@ -71,7 +71,6 @@ class EnfantController extends Controller
         'famille_id'=>'required',
 
 
-
      ]); 
       // Vérification si l'enfant existe déjà
       $existingEnfant = Enfant::where('nom', $request->nom)
@@ -96,6 +95,7 @@ class EnfantController extends Controller
             $adresse = $request->input('adresse');
 
             $famille_id = $request->input('famille_id');
+            $dortoir_id = $request->input('dortoir_id');
 
             // Create a new instance of the Enfant model
             $enfant = new Enfant();
@@ -107,6 +107,7 @@ class EnfantController extends Controller
             $enfant->adresse = $adresse;
 
             $enfant->famille_id = $famille_id;
+            $enfant->dortoir_id = $dortoir_id;
 
             $enfant->updated_at = now();
             $enfant->created_at = now();
@@ -144,10 +145,14 @@ return response()->json($enfant, 200);
 {
     // Valider les données du formulaire de mise à jour
     $request->validate([
-        'nom' => 'required',
-        'prenom' => 'required',
-        'dateness' => 'required|date',
+        'nom'=>'required|string|max:50',
+        'prenom'=>'required|string|max:50',
+        'dateness'=>'required',
+        'etat_medical'=>'required',
+        'adresse'=>'required',
+
         'famille_id'=>'required',
+
 
     ]);
 

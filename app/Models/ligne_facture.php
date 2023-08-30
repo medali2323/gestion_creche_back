@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class employe_enfant extends Model
+class ligne_facture extends Model
 {
+    use HasFactory;
+    protected $table='ligne_facture';
     protected $fillable =[
-        'nom_employe',
-        'prenom_employe',
-        'dateness',
-        'num_cin',
-        'niveau_scolaire',
+        'code',
+        'inscription_id',
+        'facture_id'
 
     ];
 }

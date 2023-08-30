@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
-use App\Models\enfant;
+use App\Models\repas_enfant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

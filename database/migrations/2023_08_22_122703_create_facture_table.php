@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('salle', function (Blueprint $table) {
+        Schema::create('facture', function (Blueprint $table) {
             $table->id();
-            $table->integer('nb_lit');
+            $table->string('code');
 
+            $table->decimal('montant_total', 10, 2);
+            $table->date('date_facturation');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('salle');
+        Schema::dropIfExists('facture');
     }
 };

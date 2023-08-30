@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repas', function (Blueprint $table) {
-            $table->id();
-            $table->string('code');
-
-            $table->string('libelle');
-
-            $table->timestamps();
+        Schema::table('facture', function (Blueprint $table) {
+            //
+            $table->unsignedBigInteger('tva_id')->nullable();
+            $table->foreign('tva_id')->references('id')->on('tva');
         });
     }
 
@@ -26,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repas');
+        Schema::table('facture', function (Blueprint $table) {
+            //
+        });
     }
 };

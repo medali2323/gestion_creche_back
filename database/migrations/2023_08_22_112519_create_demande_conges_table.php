@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dortoir', function (Blueprint $table) {
+        Schema::create('demande_conges', function (Blueprint $table) {
             $table->id();
-
-            
+            $table->string('code');
+            $table->date('date_deb');
+            $table->date('date_fin');
+            $table->boolean('validation');
+            $table->unsignedBigInteger('employe_id')->nullable();
+            $table->foreign('employe_id')->references('id')->on('employe');
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dortoir');
+        Schema::dropIfExists('demande_conges');
     }
 };

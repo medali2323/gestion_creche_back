@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conge', function (Blueprint $table) {
-            $table->id();
-            $table->date('date_deb');
-            $table->date('date_fin');
-            $table->boolean('validation');
-            
-            $table->timestamps();
+        Schema::table('enfant', function (Blueprint $table) {
+            //
+            $table->unsignedBigInteger('dortoir_id')->nullable();
+            $table->foreign('dortoir_id')->references('id')->on('dortoir');
         });
     }
 
@@ -26,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conges');
+        Schema::table('enfant', function (Blueprint $table) {
+            //
+        });
     }
 };

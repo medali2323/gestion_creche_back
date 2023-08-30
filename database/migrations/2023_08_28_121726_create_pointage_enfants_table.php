@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('pointage_enfant', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
+
             $table->string('nom_activite');
             $table->date('datepointage'); // Champ date de pointage
             $table->time('heurepointage'); // Champ heure de pointage
@@ -21,7 +23,7 @@ return new class extends Migration
             $table->foreign('enfant_id')->references('id')->on('enfant');
 
             $table->unsignedBigInteger('employe_enfant_id')->nullable();
-            $table->foreign('employe_enfant_id')->references('id')->on('employe_enfant');
+            $table->foreign('employe_enfant_id')->references('id')->on('employe');
             $table->timestamps();
         });
     }

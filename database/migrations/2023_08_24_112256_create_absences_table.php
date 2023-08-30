@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('repas', function (Blueprint $table) {
+        Schema::create('absence', function (Blueprint $table) {
             $table->id();
             $table->string('code');
 
-            $table->string('libelle');
-
-            $table->timestamps();
+            $table->date('date_absence');
+            $table->string('cause');
+            $table->unsignedBigInteger('employe_id')->nullable();
+            $table->foreign('employe_id')->references('id')->on('employe');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repas');
+        Schema::dropIfExists('absences');
     }
 };

@@ -11,7 +11,8 @@ class salle extends Model
     protected $table='salle';
 
     protected $fillable =[
-        'nb_lit',
+       'code',
+        'nb_lit'
 
     ];
 }

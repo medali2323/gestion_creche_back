@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absences', function (Blueprint $table) {
+        Schema::create('salaire', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employe_id');
+            $table->decimal('salaire_brut', 10, 2);
+            $table->date('date_paiement');
             $table->timestamps();
+
+            $table->foreign('employe_id')->references('id')->on('employe');
         });
     }
 
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absences');
+        Schema::dropIfExists('salaire');
     }
 };

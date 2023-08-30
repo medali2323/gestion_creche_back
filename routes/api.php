@@ -3,15 +3,23 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RepasController;
+use App\Http\Controllers\api\TvaController;
 use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\CongeController;
 use App\Http\Controllers\api\MediaController;
 use App\Http\Controllers\api\EnfantController;
+use App\Http\Controllers\api\AbsenceController;
+use App\Http\Controllers\api\FactureController;
 use App\Http\Controllers\api\FamilleController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
 use App\Http\Controllers\PaimentEnfantController;
 use App\Http\Controllers\PointageEnfantController;
 use App\Http\Controllers\api\inscriptionController;
+use App\Http\Controllers\api\ModePaimentController;
+use App\Http\Controllers\api\RepasEnfantController;
+use App\Http\Controllers\api\DemandeCongeController;
+use App\Http\Controllers\api\LigneFactureController;
 use App\Http\Controllers\api\anneescolaireController;
 use App\Http\Controllers\api\employeEnfantController;
 use App\Http\Controllers\api\activiteEnfantController;
@@ -49,7 +57,13 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::put('famille/{id}/edit', [FamilleController::class, 'update']);
  Route::delete('famille/{id}/delete', [FamilleController::class, 'delete']);
  Route::get('famille/{id}/enfants', [EnfantController::class, 'enfantformamille']);
-
+//Route of message
+ 
+Route::get('message', [MessageController::class, 'index']);
+Route::post('message', [MessageController::class, 'ajouter']);
+Route::get('message/{id}', [MessageController::class, 'getById']);
+Route::put('message/{id}/edit', [MessageController::class, 'update']);
+Route::delete('message/{id}/delete', [MessageController::class, 'delete']);
  //Route of anneescolaire
  
  Route::get('anneescolaire', [anneescolaireController::class, 'index']);
@@ -72,6 +86,20 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
   Route::get('Repas/{id}', [RepasController::class, 'getById']);
   Route::put('Repas/{id}/edit', [RepasController::class, 'update']);
   Route::delete('Repas/{id}/delete', [RepasController::class, 'delete']);
+ //Route of repas_enfant
+ 
+ Route::get('repas_enfant', [RepasEnfantController::class, 'index']);
+ Route::post('repas_enfant', [RepasEnfantController::class, 'ajouter']);
+ Route::get('repas_enfant/{id}', [RepasEnfantController::class, 'getById']);
+ Route::put('repas_enfant/{id}/edit', [RepasEnfantController::class, 'update']);
+ Route::delete('repas_enfant/{id}/delete', [RepasEnfantController::class, 'delete']);
+ //Route of mode_paiment
+ 
+ Route::get('mode_paiment', [ModePaimentController::class, 'index']);
+ Route::post('mode_paiment', [ModePaimentController::class, 'ajouter']);
+ Route::get('mode_paiment/{id}', [ModePaimentController::class, 'getById']);
+ Route::put('mode_paiment/{id}/edit', [ModePaimentController::class, 'update']);
+ Route::delete('mode_paiment/{id}/delete', [ModePaimentController::class, 'delete']); 
  //Route of PaimentEnfant
  
  Route::get('PaimentEnfant', [PaimentEnfantController::class, 'index']);
@@ -79,6 +107,24 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::get('PaimentEnfant/{id}', [PaimentEnfantController::class, 'getById']);
  Route::put('PaimentEnfant/{id}/edit', [PaimentEnfantController::class, 'update']);
  Route::delete('PaimentEnfant/{id}/delete', [PaimentEnfantController::class, 'delete']); 
+ //Route of facture
+Route::get('facture', [FactureController::class, 'index']);
+Route::post('facture', [FactureController::class, 'ajouter']);
+Route::get('facture/{id}', [FactureController::class, 'getById']);
+Route::put('facture/{id}/edit', [FactureController::class, 'update']);
+Route::delete('facture/{id}/delete', [FactureController::class, 'delete']);
+ //Route of ligne_facture
+ Route::get('ligne_facture', [LigneFactureController::class, 'index']);
+ Route::post('ligne_facture', [LigneFactureController::class, 'ajouter']);
+ Route::get('ligne_facture/{id}', [LigneFactureController::class, 'getById']);
+ Route::put('ligne_facture/{id}/edit', [LigneFactureController::class, 'update']);
+ Route::delete('ligne_facture/{id}/delete', [LigneFactureController::class, 'delete']);
+//Route of tva
+Route::get('tva', [TvaController::class, 'index']);
+Route::post('tva', [TvaController::class, 'ajouter']);
+Route::get('tva/{id}', [TvaController::class, 'getById']);
+Route::put('tva/{id}/edit', [TvaController::class, 'update']);
+Route::delete('tva/{id}/delete', [FactureController::class, 'delete']);
  //Route of document
  
  Route::get('document', [documentController::class, 'index']);
@@ -118,14 +164,57 @@ Route::post('pointage_enfant', [PointageEnfantController::class, 'ajouter']);
 Route::get('pointage_enfant/{id}', [PointageEnfantController::class, 'getById']);
 Route::put('pointage_enfant/{id}/edit', [PointageEnfantController::class, 'update']);
 Route::delete('pointage_enfant/{id}/delete', [PointageEnfantController::class, 'delete']);
-
-//Route of employe_enfant
+//Route of dortoir
  
-Route::get('employe_enfant', [employeEnfantController::class, 'index']);
-Route::post('employe_enfant', [employeEnfantController::class, 'ajouter']);
-Route::get('employe_enfant/{id}', [employeEnfantController::class, 'getById']);
-Route::put('employe_enfant/{id}/edit', [employeEnfantController::class, 'update']);
-Route::delete('employe_enfant/{id}/delete', [employeEnfantController::class, 'delete']);
+Route::get('dortoir', [DortoirController::class, 'index']);
+Route::post('dortoir', [DortoirController::class, 'ajouter']);
+Route::get('dortoir/{id}', [DortoirController::class, 'getById']);
+Route::put('dortoir/{id}/edit', [DortoirController::class, 'update']);
+Route::delete('dortoir/{id}/delete', [DortoirController::class, 'delete']);
+//Route of salle
+ 
+Route::get('salle', [SalleController::class, 'index']);
+Route::post('salle', [SalleController::class, 'ajouter']);
+Route::get('salle/{id}', [SalleController::class, 'getById']);
+Route::put('salle/{id}/edit', [SalleController::class, 'update']);
+Route::delete('salle/{id}/delete', [SalleController::class, 'delete']);
+
+//Route of employe
+ 
+Route::get('employe', [employeController::class, 'index']);
+Route::post('employe', [employeController::class, 'ajouter']);
+Route::get('employe/{id}', [employeController::class, 'getById']);
+Route::put('employe/{id}/edit', [employeController::class, 'update']);
+Route::delete('employe/{id}/delete', [employeController::class, 'delete']);
+//Route of DemandeConge
+ 
+Route::get('DemandeConge', [DemandeCongeController::class, 'index']);
+Route::post('DemandeConge', [DemandeCongeController::class, 'ajouter']);
+Route::get('DemandeConge/{id}', [DemandeCongeController::class, 'getById']);
+Route::put('DemandeConge/{id}/edit', [DemandeCongeController::class, 'update']);
+Route::delete('DemandeConge/{id}/delete', [DemandeCongeController::class, 'delete']);
+
+//Route of CongeController
+ 
+Route::get('CongeController', [CongeControllerController::class, 'index']);
+Route::post('CongeController', [CongeControllerController::class, 'ajouter']);
+Route::get('CongeController/{id}', [CongeControllerController::class, 'getById']);
+Route::put('CongeController/{id}/edit', [CongeControllerController::class, 'update']);
+Route::delete('CongeController/{id}/delete', [CongeControllerController::class, 'delete']);
+//Route of absence
+ 
+Route::get('absenceController', [AbsenceController::class, 'index']);
+Route::post('absenceController', [AbsenceController::class, 'ajouter']);
+Route::get('absenceController/{id}', [AbsenceController::class, 'getById']);
+Route::put('absenceController/{id}/edit', [AbsenceController::class, 'update']);
+Route::delete('absenceController/{id}/delete', [AbsenceController::class, 'delete']);
+//Route of salaire
+ 
+Route::get('salaire', [SalaireController::class, 'index']);
+Route::post('salaire', [SalaireController::class, 'ajouter']);
+Route::get('salaire/{id}', [SalaireController::class, 'getById']);
+Route::put('salaire/{id}/edit', [SalaireController::class, 'update']);
+Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
 // register ,login,logout
  Route::post('/auth/logout', [UserController::class, 'logout']);
  Route::post('/auth/register', [UserController::class, 'createUser']);

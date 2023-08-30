@@ -2,34 +2,34 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\salle;
+use App\Models\tva;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SalleController extends Controller
+class TvaController extends Controller
 {
     public function index()  {
-        $salles= salle::all();
-        if($salles->count()>0)
+        $factures= tva::all();
+        if($tvas->count()>0)
          return response()->json([
              'status'=>200,
-             'salles'=>$salles
+             'tvas'=>$tvas
             ],200);
         
         else 
          return response()->json([
              'status'=>404,
-             'salles'=>' aucun salles'
+             'tvas'=>' aucun tvas'
             ],404);
      
      
        
      }
+    
      public function ajouter(Request $request){
       $validator= Validator::make($request->all(),[
-        
-         'code'=>'required',
-         'nb_lit'=>'required|numeric'
+         'code'=>'required|string|max:50',
+         'taux_tva' => 'required|numiric',
  
       ]); 
          if ($validator->fails()) {
@@ -39,25 +39,27 @@ class SalleController extends Controller
                 ],422);
          }else {
              $code = $request->input('code');
-             $nb_lit = $request->input('nb_lit');
+             $taux_tva = $request->input('taux_tva');
+          
             
-             // Create a new instance of the salle model
-             $salle = new salle();
+          
+             // Create a new instance of the tva model
+             $tva = new tva();
      
              // Set the values of the model attributes
-             $salle->code = $code;
-             $salle->nb_lit = $nb_lit;
-           
+             $tva->code = $code;
+             $tva->taux_tva = $taux_tva;
+            
  
-             $salle->updated_at = now();
-             $salle->created_at = now();
+             $tva->updated_at = now();
+             $tva->created_at = now();
      
      
-             $salle->save();
-             if($salle){
+             $tva->save();
+             if($tva){
                  return response()->json([
                      'status'=>200,
-                     'message'=>"salle created secsusflly"
+                     'message'=>"tva created secsusflly"
                     ],200);
              }else{
                  return response()->json([
@@ -68,64 +70,63 @@ class SalleController extends Controller
          }
      }
      public function getById($id){
-      $salle = salle::find($id);
+      $tva = tva::find($id);
  
-      if (!$salle) {
+      if (!$tva) {
          return response()->json(
              [ 'status'=>404,
-             'message' => 'salle non trouvé'
+             'message' => 'tva non trouvé'
          ], 404);
   }
  
- return response()->json($salle, 200);
+ return response()->json($tva, 200);
  }
      public function update(Request $request, $id)
  {
      // Valider les données du formulaire de mise à jour
      $request->validate([
-         
-        'code'=>'required',
-        'nb_lit'=>'required|numeric'
-
+        'code'=>'required|string|max:50',
+        'taux_tva' => 'required|numiric',
+    
  
      ]);
  
-     // Trouver l'salle à mettre à jour
-     $salle = salle::find($id);
+     // Trouver l'tva à mettre à jour
+     $tva = tva::find($id);
  
-     // Vérifier si l'salle existe
-     if (!$salle) {
-         return response()->json(['message' => 'salle non trouvé'], 404);
+     // Vérifier si l'tva existe
+     if (!$tva) {
+         return response()->json(['message' => 'tva non trouvé'], 404);
      }
  
      // Mettre à jour les champs avec les nouvelles valeurs
-     $salle->code = $code;
-     $salle->nb_lit = $nb_lit;
-    
-     $salle->updated_at = now();
+     $tva->code = $code;
+     $tva->taux_tva = $taux_tva;
+     
+     $tva->updated_at = now();
  
      // Sauvegarder les modifications
-     $salle->save();
+     $tva->save();
  
-     // Retourner la réponse avec l'salle mis à jour
+     // Retourner la réponse avec l'tva mis à jour
      return response()->json([
-         'message' => 'salle mis à jour avec succès', 
-         'salle' => $salle
+         'message' => 'tva mis à jour avec succès', 
+         'tva' => $tva
      ]);
  }
  public function delete($id)
  {
-  $salle = salle::find($id);
+  $tva = tva::find($id);
  
-  if (!$salle) {
+  if (!$tva) {
      return response()->json(
          [ 'status'=>404,
-         'message' => 'salle non trouvé'
+         'message' => 'tva non trouvé'
      ], 404);
  }else {
-     $salle->delete();
+     $tva->delete();
      return response()->json([
-     'message' => 'salle supprimé avec succès'],
+     'message' => 'tva supprimé avec succès'],
       200);
  }
  

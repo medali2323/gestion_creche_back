@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class absence extends Model
+class demande_conge extends Model
 {
     use HasFactory;
-    protected $table='absence';
+    protected $table='demande_conges';
     protected $fillable =[
         'code',
-        'date',
-        'cause',
+        'date_deb',
+        'date_fin',
+        'validation',
         'employe_id'
 
     ];

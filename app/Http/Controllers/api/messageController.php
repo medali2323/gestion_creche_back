@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class messageController extends Controller
+class MessageController extends Controller
 {
     //
     public function index()  {
