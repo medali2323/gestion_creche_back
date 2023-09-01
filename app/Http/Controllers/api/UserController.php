@@ -24,7 +24,8 @@ class UserController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required'
+                'password' => 'required',
+                'role'=>'required'
             ]);
 
             if($validateUser->fails()){
@@ -38,7 +39,9 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+
             ]);
 
             return response()->json([
@@ -89,7 +92,8 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'role'=>$user->role
             ], 200);
 
         } catch (\Throwable $th) {
