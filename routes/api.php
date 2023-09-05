@@ -2,19 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RepasController;
 use App\Http\Controllers\api\TvaController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\CongeController;
 use App\Http\Controllers\api\MediaController;
+use App\Http\Controllers\api\RepasController;
+use App\Http\Controllers\api\SalleController;
 use App\Http\Controllers\api\EnfantController;
 use App\Http\Controllers\api\AbsenceController;
+use App\Http\Controllers\api\DortoirController;
 use App\Http\Controllers\api\FactureController;
 use App\Http\Controllers\api\FamilleController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
-use App\Http\Controllers\PaimentEnfantController;
-use App\Http\Controllers\PointageEnfantController;
+use App\Http\Controllers\api\PaimentEnfantController;
+use App\Http\Controllers\api\PointageEnfantController;
 use App\Http\Controllers\api\inscriptionController;
 use App\Http\Controllers\api\ModePaimentController;
 use App\Http\Controllers\api\RepasEnfantController;
@@ -23,6 +25,7 @@ use App\Http\Controllers\api\LigneFactureController;
 use App\Http\Controllers\api\anneescolaireController;
 use App\Http\Controllers\api\employeEnfantController;
 use App\Http\Controllers\api\activiteEnfantController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,11 +84,11 @@ Route::delete('message/{id}/delete', [MessageController::class, 'delete']);
 
   //Route of Repas
  
-  Route::get('Repas', [RepasController::class, 'index']);
-  Route::post('Repas', [RepasController::class, 'ajouter']);
-  Route::get('Repas/{id}', [RepasController::class, 'getById']);
-  Route::put('Repas/{id}/edit', [RepasController::class, 'update']);
-  Route::delete('Repas/{id}/delete', [RepasController::class, 'delete']);
+  Route::get('repas', [RepasController::class, 'index']);
+  Route::post('repas', [RepasController::class, 'ajouter']);
+  Route::get('repas/{id}', [RepasController::class, 'getById']);
+  Route::put('repas/{id}/edit', [RepasController::class, 'update']);
+  Route::delete('repas/{id}/delete', [RepasController::class, 'delete']);
  //Route of repas_enfant
  
  Route::get('repas_enfant', [RepasEnfantController::class, 'index']);
@@ -220,3 +223,4 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::post('/auth/register', [UserController::class, 'createUser']);
  Route::post('/auth/login', [UserController::class, 'loginUser']);
 
+ Route::get('/auth/users', [UserController::class, 'index']);

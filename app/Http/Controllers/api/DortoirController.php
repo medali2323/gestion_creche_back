@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\dortoir;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class DortoirController extends Controller
 {
@@ -80,37 +81,37 @@ class DortoirController extends Controller
  
  return response()->json($dortoir, 200);
  }
-     public function update(Request $request, $id)
+ public function update(Request $request, $id)
  {
      // Valider les données du formulaire de mise à jour
      $request->validate([
-         
-        'code'=>'required',
-        'salle_id'=>'required|numeric'
-
- 
+         'code' => 'required',
+         'salle_id' => 'required'
      ]);
  
-     // Trouver l'dortoir à mettre à jour
+     // Trouver la dortoir à mettre à jour
      $dortoir = dortoir::find($id);
  
-     // Vérifier si l'dortoir existe
+     // Vérifier si la dortoir existe
      if (!$dortoir) {
-         return response()->json(['message' => 'dortoir non trouvé'], 404);
+         return response()->json(['message' => 'dortoir non trouvée'], 404);
      }
+ 
+     // Définir la variable $code à partir de la valeur de 'code' dans la requête
+     $code = $request->input('code');
  
      // Mettre à jour les champs avec les nouvelles valeurs
      $dortoir->code = $code;
-     $dortoir->salle_id = $salle_id;
-    
-     $dortoir->updated_at = now();
+     $dortoir->salle_id = $request->input('salle_id');
  
+     $dortoir->updated_at = now();
+     
      // Sauvegarder les modifications
      $dortoir->save();
  
-     // Retourner la réponse avec l'dortoir mis à jour
+     // Retourner la réponse avec la dortoir mise à jour
      return response()->json([
-         'message' => 'dortoir mis à jour avec succès', 
+         'message' => 'dortoir mise à jour avec succès',
          'dortoir' => $dortoir
      ]);
  }

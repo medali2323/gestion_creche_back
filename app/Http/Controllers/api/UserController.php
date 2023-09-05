@@ -107,4 +107,18 @@ class UserController extends Controller
         auth()->user()->tokens()->delete();
         return ['message'=> 'logout'];
     }
+    public function index()  {
+        $users= user::all();
+        if($users->count()>0)
+         return response()->json([
+             'status'=>200,
+             'users'=>$users
+            ],200);
+        
+        else 
+         return response()->json([
+             'status'=>404,
+             'users'=>' aucun users'
+            ],404);
+}
 }

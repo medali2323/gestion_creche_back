@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\pointage_enfant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PointageEnfantController extends Controller
 {
@@ -32,8 +33,9 @@ class PointageEnfantController extends Controller
         'datepointage' => 'required|date',
         'heurepointage' => 'required|date_format:H:i',
         'enfant_id' => 'required',
-        'employe_enfant_id' => 'required'
- 
+        'employe_enfant_id' => 'required',
+        'code' => 'required|string',
+
       ]); 
          if ($validator->fails()) {
              return response()->json([
@@ -46,6 +48,7 @@ class PointageEnfantController extends Controller
              $heurepointage = $request->input('heurepointage');
              $enfant_id = $request->input('enfant_id');
              $employe_enfant_id = $request->input('employe_enfant_id');
+             $code = $request->input('code');
 
  
              // Create a new instance of the pointage_enfant model
@@ -57,6 +60,7 @@ class PointageEnfantController extends Controller
              $pointage_enfant->heurepointage = $heurepointage;
              $pointage_enfant->enfant_id = $enfant_id;
              $pointage_enfant->employe_enfant_id = $employe_enfant_id;
+             $pointage_enfant->code = $code;
 
              $pointage_enfant->updated_at = now();
              $pointage_enfant->created_at = now();

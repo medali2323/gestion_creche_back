@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\media;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class MediaController extends Controller
 {

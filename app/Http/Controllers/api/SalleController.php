@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\salle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class SalleController extends Controller
 {
@@ -79,40 +80,41 @@ class SalleController extends Controller
  
  return response()->json($salle, 200);
  }
-     public function update(Request $request, $id)
+ public function update(Request $request, $id)
  {
      // Valider les données du formulaire de mise à jour
      $request->validate([
-         
-        'code'=>'required',
-        'nb_lit'=>'required|numeric'
-
- 
+         'code' => 'required',
+         'nb_lit' => 'required'
      ]);
  
-     // Trouver l'salle à mettre à jour
-     $salle = salle::find($id);
+     // Trouver la salle à mettre à jour
+     $salle = Salle::find($id);
  
-     // Vérifier si l'salle existe
+     // Vérifier si la salle existe
      if (!$salle) {
-         return response()->json(['message' => 'salle non trouvé'], 404);
+         return response()->json(['message' => 'Salle non trouvée'], 404);
      }
+ 
+     // Définir la variable $code à partir de la valeur de 'code' dans la requête
+     $code = $request->input('code');
  
      // Mettre à jour les champs avec les nouvelles valeurs
      $salle->code = $code;
-     $salle->nb_lit = $nb_lit;
-    
-     $salle->updated_at = now();
+     $salle->nb_lit = $request->input('nb_lit');
  
+     $salle->updated_at = now();
+     
      // Sauvegarder les modifications
      $salle->save();
  
-     // Retourner la réponse avec l'salle mis à jour
+     // Retourner la réponse avec la salle mise à jour
      return response()->json([
-         'message' => 'salle mis à jour avec succès', 
+         'message' => 'Salle mise à jour avec succès',
          'salle' => $salle
      ]);
  }
+ 
  public function delete($id)
  {
   $salle = salle::find($id);
