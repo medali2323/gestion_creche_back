@@ -143,6 +143,10 @@ class employeController extends Controller
      $niveau_scolaire = $request->input('niveau_scolaire');
      $date_emboche = $request->input('date_emboche');
      $role = $request->input('role');
+     $num_cin = $request->input('num_cin');
+     $code = $request->input('code');
+     $etat_actuel = $request->input('etat_actuel');
+
      // Mettre à jour les champs avec les nouvelles valeurs
      $employe->nom_employe = $nom_employe;
      $employe->prenom_employe = $prenom_employe;
