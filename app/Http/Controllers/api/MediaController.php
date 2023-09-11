@@ -6,6 +6,7 @@ use App\Models\media;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
@@ -18,7 +19,7 @@ class MediaController extends Controller
             [
                 'nom' => 'required',
                 'pièce_jointe' => 'required',
-                'pièce_jointe' => 'required|mimes:jpeg,png,jpg,gif,svg,mp4,wav|max:2048',
+                'pièce_jointe' => 'required|mimes:jpeg,png,jpg,gif,svg,mp4,wav|max:20480',
                 'enfant_id' => 'required',
 
             ]
@@ -129,5 +130,21 @@ class MediaController extends Controller
      
        
      }
- 
+     public function delete($id)
+     {
+      $media = media::find($id);
+     
+      if (!$media) {
+         return response()->json(
+             [ 'status'=>404,
+             'message' => 'media non trouvé'
+         ], 404);
+     }
+     else {
+         $media->delete();
+         return response()->json([
+         'message' => 'media supprimé avec succès'],
+          200);
+     }
+    }
 }

@@ -11,12 +11,11 @@ use App\Http\Controllers\api\SalleController;
 use App\Http\Controllers\api\EnfantController;
 use App\Http\Controllers\api\AbsenceController;
 use App\Http\Controllers\api\DortoirController;
+use App\Http\Controllers\api\employeController;
 use App\Http\Controllers\api\FactureController;
 use App\Http\Controllers\api\FamilleController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
-use App\Http\Controllers\api\PaimentEnfantController;
-use App\Http\Controllers\api\PointageEnfantController;
 use App\Http\Controllers\api\inscriptionController;
 use App\Http\Controllers\api\ModePaimentController;
 use App\Http\Controllers\api\RepasEnfantController;
@@ -24,7 +23,9 @@ use App\Http\Controllers\api\DemandeCongeController;
 use App\Http\Controllers\api\LigneFactureController;
 use App\Http\Controllers\api\anneescolaireController;
 use App\Http\Controllers\api\employeEnfantController;
+use App\Http\Controllers\api\PaimentEnfantController;
 use App\Http\Controllers\api\activiteEnfantController;
+use App\Http\Controllers\api\PointageEnfantController;
 
 
 /*
@@ -60,6 +61,9 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::put('famille/{id}/edit', [FamilleController::class, 'update']);
  Route::delete('famille/{id}/delete', [FamilleController::class, 'delete']);
  Route::get('famille/{id}/enfants', [EnfantController::class, 'enfantformamille']);
+ Route::get('famille/getBycinpere/{cinpere}/', [FamilleController::class, 'existpere']);
+ Route::get('famille/getBycinmere/{cinmere}/', [FamilleController::class, 'existmere']);
+
 //Route of message
  
 Route::get('message', [MessageController::class, 'index']);

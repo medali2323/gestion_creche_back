@@ -29,16 +29,18 @@ class employeController extends Controller
      }
      public function ajouter(Request $request){
       $validator= Validator::make($request->all(),[
+
         'nom_employe'=>'required|string|max:50',
         'prenom_employe'=>'required|string|max:50',
-        'dateness'=>'required|date',
+        'date_ness'=>'required|date',
         'num_cin'=>'required|max:8',
         'numero_tel'=>'required|max:8',
         'adresse'=>'required',
-        'email'=>'required|email',
+        'email' => 'required|email',
         'niveau_scolaire'=>'required',
         'date_emboche'=>'required|date',
-        'role'=>'required'
+        'role'=>'required',
+        'code'=>'required'
 
  
       ]); 
@@ -57,21 +59,26 @@ class employeController extends Controller
              $niveau_scolaire = $request->input('niveau_scolaire');
              $date_emboche = $request->input('date_emboche');
              $role = $request->input('role');
+             $num_cin = $request->input('num_cin');
+             $code = $request->input('code');
+             $etat_actuel = $request->input('etat_actuel');
 
- 
              // Create a new instance of the employe model
              $employe = new employe();
      
              // Set the values of the model attributes
              $employe->nom_employe = $nom_employe;
              $employe->prenom_employe = $prenom_employe;
-             $employe->date_ness = $date_ness;
+             $employe->date_ness = $date_ness; // Assurez-vous que la clé "date_ness" correspond à la colonne "date_ness"
              $employe->num_cin = $num_cin;
              $employe->numero_tel = $numero_tel;
              $employe->adresse = $adresse;
              $employe->niveau_scolaire = $niveau_scolaire;
              $employe->date_emboche = $date_emboche;
              $employe->role = $role;
+             $employe->code = $code;
+             $employe->email = $email;
+             $employe->etat_actuel =$etat_actuel;
              $employe->updated_at = now();
              $employe->created_at = now();
      
@@ -108,7 +115,7 @@ class employeController extends Controller
      $request->validate([
         'nom_employe'=>'required|string|max:50',
         'prenom_employe'=>'required|string|max:50',
-        'dateness'=>'required|date',
+        'date_ness'=>'required|date',
         'num_cin'=>'required|max:8',
         'numero_tel'=>'required|max:8',
         'adresse'=>'required',

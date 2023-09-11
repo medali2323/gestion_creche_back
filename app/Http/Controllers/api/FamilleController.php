@@ -184,4 +184,32 @@ public function delete($id)
 }
 
 }
+public function existpere($numero_cin_pere)  {
+    $familles= famille::where('numero_cin_pere',$numero_cin_pere)->get();
+    if($familles->count()>0)
+     return response()->json([
+         'status'=>200,
+         'familles'=>$familles
+        ],200);
+    
+    else 
+     return response()->json([
+         'status'=>404,
+         'familles'=>' aucun familles for enfant avec ce numero cin pere'
+        ],404);
+ }
+ public function existmere($numero_cin_mere)  {
+    $familles= famille::where('numero_cin_mere',$numero_cin_mere)->get();
+    if($familles->count()>0)
+     return response()->json([
+         'status'=>200,
+         'familles'=>$familles
+        ],200);
+    
+    else 
+     return response()->json([
+         'status'=>404,
+         'familles'=>' aucun familles for enfant avec ce numero cin mere'
+        ],404);
+ }
 }
