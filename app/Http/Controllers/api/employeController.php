@@ -119,10 +119,11 @@ class employeController extends Controller
         'num_cin'=>'required|max:8',
         'numero_tel'=>'required|max:8',
         'adresse'=>'required',
-        'email'=>'required|email',
+        'email' => 'required|email',
         'niveau_scolaire'=>'required',
         'date_emboche'=>'required|date',
-        'role'=>'required'
+        'role'=>'required',
+        'code'=>'required'
         
      ]);
  
@@ -152,6 +153,9 @@ class employeController extends Controller
      $employe->niveau_scolaire = $niveau_scolaire;
      $employe->date_emboche = $date_emboche;
      $employe->role = $role;
+     $employe->code = $code;
+     $employe->role = $role;
+     $employe->etat_actuel = $etat_actuel;
      $employe->updated_at = now();
     
 
