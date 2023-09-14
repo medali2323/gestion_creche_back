@@ -74,6 +74,9 @@ Route::delete('message/{id}/delete', [MessageController::class, 'delete']);
  //Route of anneescolaire
  
  Route::get('anneescolaire', [anneescolaireController::class, 'index']);
+ Route::get('lastannee', [anneescolaireController::class, 'last']);
+ Route::get('getcodeannee/{id}', [anneescolaireController::class, 'getcodeannee']);
+
  Route::post('anneescolaire', [anneescolaireController::class, 'ajouter']);
  Route::get('anneescolaire/{id}', [anneescolaireController::class, 'getById']);
  Route::put('anneescolaire/{id}/edit', [anneescolaireController::class, 'update']);
@@ -81,6 +84,11 @@ Route::delete('message/{id}/delete', [MessageController::class, 'delete']);
  //Route of inscription
  
  Route::get('inscription', [inscriptionController::class, 'index']);
+ Route::get('enfantsNonInscritsDansDerniereAnnee', [inscriptionController::class, 'enfantsNonInscritsDansDerniereAnnee']);
+ Route::get('enfantsInscritsDansDerniereAnnee', [inscriptionController::class, 'enfantsInscritsDansDerniereAnnee']);
+ Route::get('inscription/{enfant_id}/{anneescolaire_id}', [inscriptionController::class, 'insritdeenfant']);
+
+ 
  Route::post('inscription', [inscriptionController::class, 'ajouter']);
  Route::get('inscription/{id}', [inscriptionController::class, 'getById']);
  Route::put('inscription/{id}/edit', [inscriptionController::class, 'update']);
@@ -178,6 +186,9 @@ Route::post('dortoir', [DortoirController::class, 'ajouter']);
 Route::get('dortoir/{id}', [DortoirController::class, 'getById']);
 Route::put('dortoir/{id}/edit', [DortoirController::class, 'update']);
 Route::delete('dortoir/{id}/delete', [DortoirController::class, 'delete']);
+Route::get('dortoirvide', [DortoirController::class, 'dortoirvide']);
+
+
 //Route of salle
  
 Route::get('salle', [SalleController::class, 'index']);

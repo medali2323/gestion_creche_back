@@ -128,4 +128,38 @@ else {
 }
 
 }
+public function last(){
+    $derniereAnneeId = anneescolaire::latest('id')->first();
+
+    if (!$derniereAnneeId) {
+       return response()->json(
+           [ 'status'=>404,
+           'message' => 'anneescolaire non trouvé'
+       ], 404);
+}
+
+return response()->json($derniereAnneeId, 200);
+}
+
+public function getcodeannee($id){
+    $derniereAnneeId = anneescolaire::find($id);
+
+    if (!$derniereAnneeId) {
+       return response()->json(
+           [ 'status'=>404,
+           'message' => 'anneescolaire non trouvé'
+       ], 404);
+}
+ else {
+    $date_deb = $derniereAnneeId['date_deb'];
+    $date_fin = $derniereAnneeId['date_fin'];
+    
+    // Formatez la période au format "2022/2023"
+    $annee_deb = date('Y', strtotime($date_deb));
+    $annee_fin = date('Y', strtotime($date_fin));
+    $periode = $annee_deb . '/' . $annee_fin;
+    
+    return response()->json(['anneescolaire' => $periode]);
+}
+}
 }

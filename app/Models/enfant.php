@@ -18,9 +18,9 @@ class enfant extends Model
         'famille_id'
 
     ];
-    public function classe()
-{
-    return $this->belongsTo(Classe::class);
-}
+    public function inscriptions()
+    {
+        return $this->hasMany(inscription::class);
+    }
 }
  

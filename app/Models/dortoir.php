@@ -15,4 +15,8 @@ class dortoir extends Model
         'salle_id'
 
     ];
+    public function enfants()
+{
+    return $this->hasMany(Enfant::class, 'dortoir_id');
+}
 }

@@ -27,6 +27,26 @@ class DortoirController extends Controller
      
        
      }
+     public function dortoirvide()  {
+        $dortoirsVides = dortoir::whereNull('enfant.dortoir_id')
+        ->leftJoin('enfant', 'dortoir.id', '=', 'enfant.dortoir_id')
+        ->select('dortoir.*')
+        ->get();        
+        if($dortoirsVides->count()>0)
+         return response()->json([
+             'status'=>200,
+             'dortoirvide'=>$dortoirsVides
+            ],200);
+        
+        else 
+         return response()->json([
+             'status'=>404,
+             'dortoirs'=>' aucun dortoirs vide '
+            ],404);
+     
+     
+       
+     }
      public function ajouter(Request $request){
       $validator= Validator::make($request->all(),[
         

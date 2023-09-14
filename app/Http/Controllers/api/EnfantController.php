@@ -172,6 +172,7 @@ return response()->json($enfant, 200);
     $enfant->adresse = $request->input('adresse');
 
     $enfant->famille_id = $request->input('famille_id');
+    $enfant->dortoir_id = $request->input('dortoir_id');
 
     // Sauvegarder les modifications
     $enfant->save();

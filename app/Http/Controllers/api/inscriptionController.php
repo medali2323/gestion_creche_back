@@ -6,6 +6,8 @@ use App\Models\inscription;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Models\anneescolaire;
+use App\Models\enfant;
 
 class inscriptionController extends Controller
 {
@@ -27,13 +29,31 @@ class inscriptionController extends Controller
     
       
     }
+    public function insritdeenfant(Request $request,$enfant_id,$anneescolaire_id)  {
+        $inscriptions= inscription::where('enfant_id', $enfant_id)
+        ->where('anneescolaire_id', $anneescolaire_id)
+        ->first();
+        if($inscriptions)
+         return response()->json([
+             'status'=>200,
+             'inscriptions'=>$inscriptions
+            ],200);
+        
+        else 
+         return response()->json([
+             'status'=>404,
+             'inscriptions'=>' aucun inscriptions'
+            ],404);
+     
+     
+       
+     }
     public function ajouter(Request $request){
      $validator= Validator::make($request->all(),[
-        'date_inscription'=>'required|datetime',
-        
-        'anneescolaire_id'=>'required',
-        'inscription_id'=>'required',
+        'date_inscription'=>'required|date',
+        'enfant_id'=>'required',
 
+        'anneescolaire_id'=>'required',
 
 
      ]); 
@@ -43,11 +63,10 @@ class inscriptionController extends Controller
                 'ERRORRS'=>$validator->messages() 
                ],422);
         }else {
-            $date_inscription = $request->input('date_inscription');
-
-            
+         
             $anneescolaire_id = $request->input('anneescolaire_id');
             $enfant_id = $request->input('enfant_id');
+            $date_inscription = $request->input('date_inscription');
 
             // Create a new instance of the inscription model
             $inscription = new inscription();
@@ -55,7 +74,8 @@ class inscriptionController extends Controller
             // Set the values of the model attributes
             $inscription->anneescolaire_id = $anneescolaire_id;
             $inscription->enfant_id = $enfant_id;
-          
+            $inscription->date_inscription = $date_inscription;
+
 
             $inscription->updated_at = now();
             $inscription->created_at = now();
@@ -137,5 +157,29 @@ public function delete($id)
 }
 
 }
- 
+
+public function enfantsNonInscritsDansDerniereAnnee()
+{
+    // Trouver l'ID de la dernière année scolaire
+    $derniereAnneeId = anneescolaire::latest('id')->first()->id;
+
+    // Récupérer les enfants qui ne sont pas inscrits dans la dernière année scolaire
+    $enfantsNonInscrits = enfant::whereDoesntHave('inscriptions', function ($query) use ($derniereAnneeId) {
+        $query->where('anneescolaire_id', $derniereAnneeId);
+    })->get();
+
+    return response()->json($enfantsNonInscrits);
+}
+public function enfantsInscritsDansDerniereAnnee()
+{
+    // Trouver l'ID de la dernière année scolaire
+    $derniereAnneeId = anneescolaire::latest('id')->first()->id;
+
+    // Récupérer les enfants qui ne sont pas inscrits dans la dernière année scolaire
+    $enfantsInscrits = enfant::whereHas('inscriptions', function ($query) use ($derniereAnneeId) {
+        $query->where('anneescolaire_id', $derniereAnneeId);
+    })->get();
+
+    return response()->json($enfantsInscrits);
+}
 }
