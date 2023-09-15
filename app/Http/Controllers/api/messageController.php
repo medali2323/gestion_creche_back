@@ -90,20 +90,19 @@ class MessageController extends Controller
 
 return response()->json($message, 200);
 }
-    public function update(Request $request, $id)
+public function update(Request $request, $id)
 {
     // Valider les données du formulaire de mise à jour
     $request->validate([
-        'date_message'=>'required',
-        'objet_message'=>'required|string|max:50',
-        'contenu'=>'required|string|max:50',
-        'famille_id'=>'required',
-        'etat'=>'required',
-
+        'date_message' => 'required',
+        'objet_message' => 'required|string|max:50',
+        'contenu' => 'required|string|max:50',
+        'famille_id' => 'required',
+        'etat' => 'required', // Assurez-vous que 'etat' est bien défini dans le formulaire
     ]);
 
     // Trouver l'message à mettre à jour
-    $message = message::find($id);
+    $message = Message::find($id);
 
     // Vérifier si l'message existe
     if (!$message) {
@@ -112,20 +111,21 @@ return response()->json($message, 200);
 
     // Mettre à jour les champs avec les nouvelles valeurs
     $message->objet_message = $request->input('objet_message');
-    $message->objet_message = $request->input('objet_message');
     $message->contenu = $request->input('contenu');
     $message->famille_id = $request->input('famille_id');
-    $etat = $request->input('etat');
+    $message->etat = $request->input('etat'); // Assurez-vous que 'etat' est bien défini dans le formulaire
+    $message->date_message = $request->input('date_message');
 
     // Sauvegarder les modifications
     $message->save();
 
     // Retourner la réponse avec l'message mis à jour
     return response()->json([
-        'message' => 'message mis à jour avec succès', 
+        'message' => 'message mis à jour avec succès',
         'message' => $message
     ]);
 }
+
 public function delete($id)
 {
  $message = message::find($id);
@@ -143,4 +143,21 @@ public function delete($id)
 }
 
 }
+public function messageformamille($idf)  {
+    $messages= message::where('famille_id',$idf)->get();
+    if($messages->count()>0)
+     return response()->json([
+         'status'=>200,
+         'messages'=>$messages
+        ],200);
+    
+    else 
+     return response()->json([
+         'status'=>404,
+         'messages'=>' aucun messages for Famille'
+        ],404);
+ 
+ 
+   
+ }
 }

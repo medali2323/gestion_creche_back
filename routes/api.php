@@ -14,6 +14,7 @@ use App\Http\Controllers\api\DortoirController;
 use App\Http\Controllers\api\employeController;
 use App\Http\Controllers\api\FactureController;
 use App\Http\Controllers\api\FamilleController;
+use App\Http\Controllers\api\MessageController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
 use App\Http\Controllers\api\inscriptionController;
@@ -71,6 +72,8 @@ Route::post('message', [MessageController::class, 'ajouter']);
 Route::get('message/{id}', [MessageController::class, 'getById']);
 Route::put('message/{id}/edit', [MessageController::class, 'update']);
 Route::delete('message/{id}/delete', [MessageController::class, 'delete']);
+Route::get('famille/{id}/messages', [MessageController::class, 'messageformamille']);
+
  //Route of anneescolaire
  
  Route::get('anneescolaire', [anneescolaireController::class, 'index']);

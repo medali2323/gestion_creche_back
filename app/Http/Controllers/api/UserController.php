@@ -25,7 +25,9 @@ class UserController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
-                'role'=>'required'
+                'role'=>'required',
+                'idr'=>'required'
+
             ]);
 
             if($validateUser->fails()){
@@ -41,6 +43,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
+                'idr' => $request->idr,
 
             ]);
 
@@ -93,7 +96,9 @@ class UserController extends Controller
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
-                'role'=>$user->role
+                'role'=>$user->role,
+                'idr'=>$user->idr
+
             ], 200);
 
         } catch (\Throwable $th) {
