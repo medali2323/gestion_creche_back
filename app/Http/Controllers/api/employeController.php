@@ -87,7 +87,9 @@ class employeController extends Controller
              if($employe){
                  return response()->json([
                      'status'=>200,
-                     'message'=>"employe created secsusflly"
+                     'message'=>"employe created secsusflly",
+                     'idemploye' => $employe->id
+
                     ],200);
              }else{
                  return response()->json([
