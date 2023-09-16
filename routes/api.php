@@ -236,9 +236,15 @@ Route::post('salaire', [SalaireController::class, 'ajouter']);
 Route::get('salaire/{id}', [SalaireController::class, 'getById']);
 Route::put('salaire/{id}/edit', [SalaireController::class, 'update']);
 Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
+ //stat
+ Route::get('/nb_enfants', [EnfantController::class, 'nb_enfants']);
+ Route::get('/nb_employes', [employeController::class, 'nb_employes']);
+ Route::get('/nb_familles', [FamilleController::class, 'nb_familles']);
+
 // register ,login,logout
  Route::post('/auth/logout', [UserController::class, 'logout']);
  Route::post('/auth/register', [UserController::class, 'createUser']);
  Route::post('/auth/login', [UserController::class, 'loginUser']);
+
 
  Route::get('/auth/users', [UserController::class, 'index']);

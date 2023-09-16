@@ -191,5 +191,10 @@ class employeController extends Controller
  }
  
  }
-  
+ public function nb_employes()
+ {
+     $sum = employe::count(); // Utilisez la fonction count() pour obtenir la somme des employe
+     
+     return response()->json(['nb_employe' => $sum]);
+ }
 }

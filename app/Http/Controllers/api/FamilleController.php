@@ -212,4 +212,10 @@ public function existpere($numero_cin_pere)  {
          'familles'=>' aucun familles for enfant avec ce numero cin mere'
         ],404);
  }
+ public function nb_familles()
+ {
+     $sum = famille::count(); // Utilisez la fonction count() pour obtenir la somme des famille
+     
+     return response()->json(['nb_familles' => $sum]);
+ }
 }

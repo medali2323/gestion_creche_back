@@ -200,4 +200,10 @@ public function delete($id)
 }
 
 }
+public function nb_enfants()
+    {
+        $sum = Enfant::count(); // Utilisez la fonction count() pour obtenir la somme des enfants
+        
+        return response()->json(['nb_enfants' => $sum]);
+    }
 }
