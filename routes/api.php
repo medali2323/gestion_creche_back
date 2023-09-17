@@ -142,13 +142,13 @@ Route::get('tva', [TvaController::class, 'index']);
 Route::post('tva', [TvaController::class, 'ajouter']);
 Route::get('tva/{id}', [TvaController::class, 'getById']);
 Route::put('tva/{id}/edit', [TvaController::class, 'update']);
-Route::delete('tva/{id}/delete', [FactureController::class, 'delete']);
+Route::delete('tva/{id}/delete', [TvaController::class, 'delete']);
  //Route of document
  
  Route::get('document', [documentController::class, 'index']);
  Route::post('document', [documentController::class, 'ajouter']);
  Route::get('document/{id}', [documentController::class, 'getById']);
- Route::put('document/{id}/edit', [documentController::class, 'update']);
+ Route::post('document/{id}/edit', [documentController::class, 'update']);
  Route::delete('document/{id}/delete', [documentController::class, 'delete']);
 
  //Route of media
@@ -245,6 +245,7 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::post('/auth/logout', [UserController::class, 'logout']);
  Route::post('/auth/register', [UserController::class, 'createUser']);
  Route::post('/auth/login', [UserController::class, 'loginUser']);
+ Route::post('/auth/change-password',[UserController::class,'change_password'])->middleware('auth:sanctum');
 
 
  Route::get('/auth/users', [UserController::class, 'index']);

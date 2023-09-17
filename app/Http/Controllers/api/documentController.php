@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\File;
 class documentController extends Controller
 {
      public function ajouter(Request $request) {
@@ -91,48 +91,57 @@ class documentController extends Controller
        
      }
 
-     public function update(documentStoreRequest $request, $id)
+     public function update(Request $request,$id)
      {
-         try {
-             // Find document
-             $document = document::find($id);
-             if(!$document){
-               return response()->json([
-                 'message'=>'document Not Found.'
-               ],404);
+         $document=document::findOrFail($id);
+         
+         $destination=public_path("uploads/".$document->pièce_jointe);
+         $filename="";
+         if($request->hasFile('pièce_jointe')){
+             if(File::exists($destination)){
+                 File::delete($destination);
              }
-      
-             $document->nom = $request->nom;
-             $document->description = $request->description;
-      
-             if($request->image) {
-                 // Public storage
-                 $storage = Storage::disk('public/upload');
-      
-                 // Old iamge delete
-                 if($storage->exists($document->image))
-                     $storage->delete($document->image);
-      
-                 // Image name
-                 $imageName = Str::random(32).".".$request->image->getClientOriginalExtension();
-                 $document->image = $imageName;
-      
-                 // Image save in public folder
-                 $storage->put($imageName, file_get_contents($request->image));
-             }
-      
-             // Update document
-             $document->save();
-      
-             // Return Json Response
-             return response()->json([
-                 'message' => "document successfully updated."
-             ],200);
-         } catch (\Exception $e) {
-             // Return Json Response
-             return response()->json([
-                 'message' => "Something went really wrong!"
-             ],500);
+ 
+             $filename=$request->file('pièce_jointe')->store('posts','public');
+         }else{
+             $filename=$request->image;
+         }
+         $document->nom_document=$request->nom_document;
+         $document->enfant_id=$request->enfant_id;
+         $document->pièce_jointe=$filename;
+         $result=$document->save();
+         if($result){
+             return response()->json(['success'=>true]);
+         }else{
+             return response()->json(['success'=>false]);
          }
      }
+ 
+ 
+     public function delete($id){
+        $document = document::find($id);
+       
+        if (!$document) {
+           return response()->json(
+               [ 'status'=>404,
+               'message' => 'document non trouvé'
+           ], 404);
+       }
+       else {
+           $document->delete();
+           return response()->json([
+           'message' => 'document supprimé avec succès'],
+            200);
+       }
     }
+    public function getById($id){
+        $document = document::find($id);
+   
+        if (!$document) {
+           return response()->json(
+               [ 'status'=>404,
+               'message' => 'document non trouvé'
+           ], 404);
+    }
+}
+}
