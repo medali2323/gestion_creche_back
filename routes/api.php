@@ -27,6 +27,7 @@ use App\Http\Controllers\api\employeEnfantController;
 use App\Http\Controllers\api\PaimentEnfantController;
 use App\Http\Controllers\api\activiteEnfantController;
 use App\Http\Controllers\api\PointageEnfantController;
+use App\Http\Controllers\api\TypeInscriptionController;
 
 
 /*
@@ -90,13 +91,22 @@ Route::get('famille/{id}/messages', [MessageController::class, 'messageformamill
  Route::get('enfantsNonInscritsDansDerniereAnnee', [inscriptionController::class, 'enfantsNonInscritsDansDerniereAnnee']);
  Route::get('enfantsInscritsDansDerniereAnnee', [inscriptionController::class, 'enfantsInscritsDansDerniereAnnee']);
  Route::get('inscription/{enfant_id}/{anneescolaire_id}', [inscriptionController::class, 'insritdeenfant']);
-
  
+ Route::get('inscriptionsDerniereAnneeScolaire', [inscriptionController::class, 'inscriptionsDerniereAnneeScolaire']);
+
+
+
  Route::post('inscription', [inscriptionController::class, 'ajouter']);
  Route::get('inscription/{id}', [inscriptionController::class, 'getById']);
  Route::put('inscription/{id}/edit', [inscriptionController::class, 'update']);
  Route::delete('inscription/{id}/delete', [inscriptionController::class, 'delete']);
-
+//Route of type_inscriptions
+ 
+Route::get('type_inscriptions', [TypeInscriptionController::class, 'index']);
+Route::post('type_inscriptions', [TypeInscriptionController::class, 'ajouter']);
+Route::get('type_inscriptions/{id}', [TypeInscriptionController::class, 'getById']);
+Route::put('type_inscriptions/{id}/edit', [TypeInscriptionController::class, 'update']);
+Route::delete('type_inscriptions/{id}/delete', [TypeInscriptionController::class, 'delete']);
   //Route of Repas
  
   Route::get('repas', [RepasController::class, 'index']);

@@ -54,6 +54,7 @@ class inscriptionController extends Controller
         'enfant_id'=>'required',
 
         'anneescolaire_id'=>'required',
+        'type_inscriptions_id'=>'required',
 
 
      ]); 
@@ -67,6 +68,7 @@ class inscriptionController extends Controller
             $anneescolaire_id = $request->input('anneescolaire_id');
             $enfant_id = $request->input('enfant_id');
             $date_inscription = $request->input('date_inscription');
+            $type_inscriptions_id = $request->input('type_inscriptions_id');
 
             // Create a new instance of the inscription model
             $inscription = new inscription();
@@ -75,6 +77,7 @@ class inscriptionController extends Controller
             $inscription->anneescolaire_id = $anneescolaire_id;
             $inscription->enfant_id = $enfant_id;
             $inscription->date_inscription = $date_inscription;
+            $inscription->type_inscriptions_id = $type_inscriptions_id;
 
 
             $inscription->updated_at = now();
@@ -111,10 +114,11 @@ public function update(Request $request, $id)
 {
     // Valider les données du formulaire de mise à jour
     $request->validate([
-        'date_inscription'=>'required|datetime',
-        
-        'anneescolaire_id'=>'required',
+        'date_inscription'=>'required|date',
         'enfant_id'=>'required',
+
+        'anneescolaire_id'=>'required',
+        'type_inscriptions_id'=>'required',
     ]);
 
     // Trouver l'inscription à mettre à jour
@@ -130,6 +134,7 @@ public function update(Request $request, $id)
     $inscription->anneescolaire_id = $request->input('anneescolaire_id');
     $inscription->enfant_id = $request->input('enfant_id');
 
+    $inscription->type_inscriptions_id = $request->input('type_inscriptions_id');
 
     // Sauvegarder les modifications
     $inscription->save();
@@ -178,8 +183,38 @@ public function enfantsInscritsDansDerniereAnnee()
     // Récupérer les enfants qui ne sont pas inscrits dans la dernière année scolaire
     $enfantsInscrits = enfant::whereHas('inscriptions', function ($query) use ($derniereAnneeId) {
         $query->where('anneescolaire_id', $derniereAnneeId);
-    })->get();
+    })
+    ->with(['inscriptions' => function ($query) {
+        $query->select('id', 'enfant_id', 'date_inscription', 'anneescolaire_id', 'type_inscriptions_id')
+              ->with('typeInscription:id,libelle,prix_inscription'); // Charger l'objet "typeInscription" et sélectionner les colonnes requises
+    }])
+    ->get();
+
+    // Renommer la clé "type_inscriptions_id" en "type_inscription"
+    $enfantsInscrits->transform(function ($enfant) {
+        $enfant->inscriptions->transform(function ($inscription) {
+            $inscription->type_inscription = $inscription->typeInscription;
+            unset($inscription->typeInscription);
+            return $inscription;
+        });
+        return $enfant;
+    });
 
     return response()->json($enfantsInscrits);
 }
+
+public function inscriptionsDerniereAnneeScolaire()
+{
+    // Étape 1 : Récupérez l'ID de la dernière année scolaire
+    $derniereAnneeId = AnneeScolaire::latest('id')->first()->id;
+
+    // Étape 2 : Récupérez les inscriptions de la dernière année scolaire avec les relations
+    $inscriptionsDerniereAnnee = Inscription::where('anneescolaire_id', $derniereAnneeId)
+        ->with('enfant.famille', 'typeInscription') // Charger les relations enfant et typeInscription
+        ->get();
+
+    // Maintenant, $inscriptionsDerniereAnnee contient les inscriptions de la dernière année scolaire avec les noms des enfants et les types d'inscription
+    return response()->json($inscriptionsDerniereAnnee);
+}
+
 }
