@@ -5,11 +5,11 @@ namespace App\Http\Controllers\api;
 use App\Models\tva;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Validator;
 class TvaController extends Controller
 {
     public function index()  {
-        $factures= tva::all();
+        $tvas= tva::all();
         if($tvas->count()>0)
          return response()->json([
              'status'=>200,
@@ -29,7 +29,7 @@ class TvaController extends Controller
      public function ajouter(Request $request){
       $validator= Validator::make($request->all(),[
          'code'=>'required|string|max:50',
-         'taux_tva' => 'required|numiric',
+         'taux_tva' => 'required|numeric',
  
       ]); 
          if ($validator->fails()) {
@@ -86,7 +86,7 @@ class TvaController extends Controller
      // Valider les données du formulaire de mise à jour
      $request->validate([
         'code'=>'required|string|max:50',
-        'taux_tva' => 'required|numiric',
+        'taux_tva' => 'required|numeric',
     
  
      ]);

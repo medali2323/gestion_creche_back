@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class tva extends Model
 {
     use HasFactory;
+    protected $table='tva';
+
+    protected $fillable =[
+       'code',
+        'taux_tva'
+
+    ];
 }

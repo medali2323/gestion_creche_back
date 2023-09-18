@@ -51,7 +51,6 @@ class FactureController extends Controller
              // Set the values of the model attributes
              $facture->code = $code;
              $facture->montant_total = $montant_total;
-             $facture->numero_telephone_pere = $numero_telephone_pere;
              $facture->date_facturation = $date_facturation;
              $facture->tva_id = $tva_id;
             
@@ -64,7 +63,9 @@ class FactureController extends Controller
              if($facture){
                  return response()->json([
                      'status'=>200,
-                     'message'=>"facture created secsusflly"
+                     'message'=>"facture created secsusflly",
+                     'facture' => $facture
+
                     ],200);
              }else{
                  return response()->json([
@@ -120,7 +121,7 @@ class FactureController extends Controller
      return response()->json([
          'message' => 'facture mis à jour avec succès', 
          'facture' => $facture
-     ]);
+        ]);
  }
  public function delete($id)
  {
