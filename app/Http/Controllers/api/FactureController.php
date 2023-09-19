@@ -87,42 +87,42 @@ class FactureController extends Controller
  
  return response()->json($facture, 200);
  }
-     public function update(Request $request, $id)
- {
-     // Valider les données du formulaire de mise à jour
-     $request->validate([
-        'code'=>'required|string|max:50',
+ public function update(Request $request, $id)
+{
+    // Valider les données du formulaire de mise à jour
+    $request->validate([
+        'code' => 'required|string|max:50',
         'montant_total' => 'required|numeric',
         'date_facturation' => 'required|date',
-        'tva_id'=>'required'
- 
-     ]);
- 
-     // Trouver l'facture à mettre à jour
-     $facture = facture::find($id);
- 
-     // Vérifier si l'facture existe
-     if (!$facture) {
-         return response()->json(['message' => 'facture non trouvé'], 404);
-     }
- 
-     // Mettre à jour les champs avec les nouvelles valeurs
-     $facture->code = $code;
-     $facture->montant_total = $montant_total;
-     $facture->date_facturation = $date_facturation;
-     $facture->tva_id = $tva_id;
-     
-     $facture->updated_at = now();
- 
-     // Sauvegarder les modifications
-     $facture->save();
- 
-     // Retourner la réponse avec l'facture mis à jour
-     return response()->json([
-         'message' => 'facture mis à jour avec succès', 
-         'facture' => $facture
-        ]);
- }
+        'tva_id' => 'required'
+    ]);
+
+    // Trouver l'facture à mettre à jour
+    $facture = Facture::find($id);
+
+    // Vérifier si l'facture existe
+    if (!$facture) {
+        return response()->json(['message' => 'facture non trouvé'], 404);
+    }
+
+    // Mettre à jour les champs avec les nouvelles valeurs de la requête
+    $facture->code = $request->input('code');
+    $facture->montant_total = $request->input('montant_total');
+    $facture->date_facturation = $request->input('date_facturation');
+    $facture->tva_id = $request->input('tva_id');
+
+    $facture->updated_at = now();
+
+    // Sauvegarder les modifications
+    $facture->save();
+
+    // Retourner la réponse avec l'facture mis à jour
+    return response()->json([
+        'message' => 'facture mis à jour avec succès',
+        'facture' => $facture
+    ]);
+}
+
  public function delete($id)
  {
   $facture = facture::find($id);

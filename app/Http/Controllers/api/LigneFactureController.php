@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\facture;
+use App\Models\ligne_facture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class LigneFactureController extends Controller
 {
     public function index()  {
-        $factures= ligne_facture::all();
+        $ligne_factures= ligne_facture::all();
         if($ligne_factures->count()>0)
          return response()->json([
              'status'=>200,
@@ -27,7 +27,7 @@ class LigneFactureController extends Controller
        
      }
      public function getlignesforfacture($idf)  {
-        $factures= ligne_facture::where('facture_id',$idf)->get();
+        $ligne_factures= ligne_facture::where('facture_id',$idf)->get();
         if($ligne_factures->count()>0)
          return response()->json([
              'status'=>200,
@@ -78,7 +78,9 @@ class LigneFactureController extends Controller
              if($ligne_facture){
                  return response()->json([
                      'status'=>200,
-                     'message'=>"ligne_facture created secsusflly"
+                     'message'=>"ligne_facture created secsusflly",
+                     'ligne_facture' => $ligne_facture
+
                     ],200);
              }else{
                  return response()->json([
