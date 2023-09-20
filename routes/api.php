@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::get('famille/{id}/enfants', [EnfantController::class, 'enfantformamille']);
  Route::get('famille/getBycinpere/{cinpere}/', [FamilleController::class, 'existpere']);
  Route::get('famille/getBycinmere/{cinmere}/', [FamilleController::class, 'existmere']);
+ Route::get('/famille/{familleId}/factures',[FamilleController::class, 'getFactures']);
 
 //Route of message
  
@@ -94,6 +95,7 @@ Route::get('famille/{id}/messages', [MessageController::class, 'messageformamill
  
  Route::get('inscriptionsDerniereAnneeScolaire', [inscriptionController::class, 'inscriptionsDerniereAnneeScolaire']);
 
+ Route::get('checkIfLigneFactureExists/{inscription_id}/{mois}', [LigneFactureController::class, 'checkIfLigneFactureExists']);
 
 
  Route::post('inscription', [inscriptionController::class, 'ajouter']);
@@ -227,11 +229,11 @@ Route::delete('DemandeConge/{id}/delete', [DemandeCongeController::class, 'delet
 
 //Route of CongeController
  
-Route::get('CongeController', [CongeControllerController::class, 'index']);
-Route::post('CongeController', [CongeControllerController::class, 'ajouter']);
-Route::get('CongeController/{id}', [CongeControllerController::class, 'getById']);
-Route::put('CongeController/{id}/edit', [CongeControllerController::class, 'update']);
-Route::delete('CongeController/{id}/delete', [CongeControllerController::class, 'delete']);
+Route::get('Conge', [CongeController::class, 'index']);
+Route::post('Conge', [CongeController::class, 'ajouter']);
+Route::get('Conge/{id}', [CongeController::class, 'getById']);
+Route::put('Conge/{id}/edit', [CongeController::class, 'update']);
+Route::delete('Conge/{id}/delete', [CongeController::class, 'delete']);
 //Route of absence
  
 Route::get('absenceController', [AbsenceController::class, 'index']);

@@ -24,9 +24,18 @@ class famille extends Model
         'adresse_mere'
 
     ];
-    public function classe()
-{
-    return $this->belongsTo(Classe::class);
-}
+    public function enfants()
+    {
+        return $this->hasMany(enfant::class);
+    }
+
+    public function factures()
+    {
+        return $this->hasManyThrough(facture::class, enfant::class)
+            ->join('inscriptions', 'facturesس.id', '=', 'inscriptions.facture_id')
+            ->join('ligne_factures', 'inscriptions.id', '=', 'ligne_factures.inscription_id')
+            ->select('facture.*')
+            ->groupBy('factures.id');
+    }
 }
  

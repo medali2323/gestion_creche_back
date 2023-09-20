@@ -44,52 +44,83 @@ class LigneFactureController extends Controller
        
      }
      public function ajouter(Request $request){
-      $validator= Validator::make($request->all(),[
-         'code'=>'required|string|max:50',
-         'inscription_id' => 'required',
-         'facture_id' => 'required'
- 
-      ]); 
-         if ($validator->fails()) {
-             return response()->json([
-                 'status'=>422,
-                 'ERRORRS'=>$validator->messages() 
-                ],422);
-         }else {
-             $code = $request->input('code');
-             $inscription_id = $request->input('inscription_id');
-             $facture_id = $request->input('facture_id');
-            
-          
-             // Create a new instance of the ligne_facture model
-             $ligne_facture = new ligne_facture();
-     
-             // Set the values of the model attributes
-             $ligne_facture->code = $code;
-             $ligne_facture->inscription_id = $inscription_id;
-             $ligne_facture->facture_id = $facture_id;
-            
- 
-             $ligne_facture->updated_at = now();
-             $ligne_facture->created_at = now();
-     
-     
-             $ligne_facture->save();
-             if($ligne_facture){
-                 return response()->json([
-                     'status'=>200,
-                     'message'=>"ligne_facture created secsusflly",
-                     'ligne_facture' => $ligne_facture
-
-                    ],200);
-             }else{
-                 return response()->json([
-                     'status'=>500,
-                     'message'=>"un problem quelque part"
-                    ],500);
-             }
-         }
-     }
+        $validator = Validator::make($request->all(), [
+            'code' => 'required|string|max:50',
+            'inscription_id' => 'required',
+            'facture_id' => 'required',
+            'mois_facturation' => 'required'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'ERRORRS' => $validator->messages()
+            ], 422);
+        } else {
+            $code = $request->input('code');
+            $inscription_id = $request->input('inscription_id');
+            $facture_id = $request->input('facture_id');
+            $mois_facturation = $request->input('mois_facturation');
+    
+            // Vérifier si une ligne de facturation existe déjà pour cette inscription et ce mois
+            $existingLigneFacture = ligne_facture::where('inscription_id', $inscription_id)
+                ->where('mois_facturation', $mois_facturation)
+                ->first();
+    
+            if ($existingLigneFacture) {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'Une ligne de facturation existe déjà pour cette inscription ce mois-ci.'
+                ], 422);
+            }
+    
+            // Créer une nouvelle instance du modèle ligne_facture
+            $ligne_facture = new ligne_facture();
+    
+            // Définir les valeurs des attributs du modèle
+            $ligne_facture->code = $code;
+            $ligne_facture->inscription_id = $inscription_id;
+            $ligne_facture->facture_id = $facture_id;
+            $ligne_facture->mois_facturation = $mois_facturation;
+            $ligne_facture->updated_at = now();
+            $ligne_facture->created_at = now();
+    
+            $ligne_facture->save();
+            if ($ligne_facture) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "ligne_facture created successfully",
+                    'ligne_facture' => $ligne_facture
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 500,
+                    'message' => "Un problème est survenu quelque part"
+                ], 500);
+            }
+        }
+    }
+    public function checkIfLigneFactureExists($inscriptionId, $moisFacturation)
+    {
+        // Utilisez la méthode "first" au lieu de "exists" pour obtenir un modèle ou null
+        $ligneFacture = ligne_facture::where('inscription_id', $inscriptionId)
+            ->where('mois_facturation', $moisFacturation)
+            ->first();
+    
+        // Si une ligne de facture existe, retournez true, sinon retournez false
+        if ($ligneFacture !== null) {
+            return response()->json([
+                'status' => 422,
+                'facture' => "Ligne facture existe"
+            ], 422);
+        }else {
+            return response()->json([
+                'status' => 200,
+                'facture' => "Ligne facture  non existe"
+            ], 200);
+        }
+    }
+    
      public function getById($id){
       $ligne_facture = ligne_facture::find($id);
  
@@ -109,6 +140,7 @@ class LigneFactureController extends Controller
         'code'=>'required|string|max:50',
         'inscription_id' => 'required',
         'facture_id' => 'required',
+        'mois_facturation' => 'required'
     
  
      ]);
@@ -125,7 +157,8 @@ class LigneFactureController extends Controller
      $ligne_facture->code = $code;
      $ligne_facture->inscription_id = $inscription_id;
      $ligne_facture->facture_id = $facture_id;
-     
+     $ligne_facture->mois_facturation = $mois_facturation;
+
      $ligne_facture->updated_at = now();
  
      // Sauvegarder les modifications
@@ -154,5 +187,6 @@ class LigneFactureController extends Controller
  }
  
  }
+ 
  }
  

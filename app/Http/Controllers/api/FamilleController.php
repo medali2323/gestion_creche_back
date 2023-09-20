@@ -218,4 +218,14 @@ public function existpere($numero_cin_pere)  {
      
      return response()->json(['nb_familles' => $sum]);
  }
+ public function getFactures($familleId)
+ {
+     $famille = famille::with('facture')->find($familleId);
+
+     // Maintenant, vous avez accès aux factures de la famille
+     $factures = $famille->factures;
+
+     // Faites quelque chose avec les factures (par exemple, les renvoyer en JSON)
+     return response()->json(['facture' => $factures]);
+ }
 }

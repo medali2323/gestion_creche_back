@@ -12,7 +12,8 @@ class ligne_facture extends Model
     protected $fillable =[
         'code',
         'inscription_id',
-        'facture_id'
+        'facture_id',
+        'mois_facturation'
 
     ];
 }
