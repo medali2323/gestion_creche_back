@@ -28,5 +28,10 @@ public function enfant()
     {
         return $this->belongsTo(enfant::class, 'enfant_id');
     }
+    public function ligneFacture()
+{
+    return $this->hasOne(ligne_facture::class, 'inscription_id');
+}
+
 }
  

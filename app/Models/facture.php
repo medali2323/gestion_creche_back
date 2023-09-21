@@ -16,4 +16,8 @@ class facture extends Model
         'tva_id'
 
     ];
+    public function lignesFacture()
+{
+    return $this->hasMany(ligne_facture::class);
+}
 }

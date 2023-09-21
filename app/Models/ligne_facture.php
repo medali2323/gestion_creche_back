@@ -16,4 +16,14 @@ class ligne_facture extends Model
         'mois_facturation'
 
     ];
+    public function facture()
+{
+    return $this->belongsTo(facture::class, 'facture_id');
+}
+public function inscription()
+{
+    return $this->belongsTo(inscription::class,'inscription_id');
+}
+
+
 }

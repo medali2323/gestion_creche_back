@@ -97,7 +97,8 @@ class UserController extends Controller
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'role'=>$user->role,
-                'idr'=>$user->idr
+                'idr'=>$user->idr,
+                'user'=>$user
 
             ], 200);
 
@@ -126,33 +127,71 @@ class UserController extends Controller
              'users'=>' aucun users'
             ],404);
 }
-public function change_password(Request $request){
-    $validator = Validator::make($request->all(), [
-        'old_password'=>'required',
-        'password'=>'required',
-        'confirm_password'=>'required|same:password'
-    ]);
-    if ($validator->fails()) {
-        return response()->json([
-            'message'=>'Validations fails',
-            'errors'=>$validator->errors()
-        ],422);
-    }
-
-    $user=$request->user();
-    if(Hash::check($request->old_password,$user->password)){
-        $user->update([
-            'password'=>Hash::make($request->password)
+    public function change_password(Request $request){
+        $validator = Validator::make($request->all(), [
+            'old_password'=>'required',
+            'password'=>'required',
+            'confirm_password'=>'required|same:password'
         ]);
-        return response()->json([
-            'message'=>'Password successfully updated',
-        ],200);
-    }else{
-        return response()->json([
-            'message'=>'Old password does not matched',
-        ],400);
+        if ($validator->fails()) {
+            return response()->json([
+                'message'=>'Validations fails',
+                'errors'=>$validator->errors()
+            ],422);
+        }
+
+        $user=$request->user();
+        if(Hash::check($request->old_password,$user->password)){
+            $user->update([
+                'password'=>Hash::make($request->password)
+            ]);
+            return response()->json([
+                'message'=>'Password successfully updated',
+            ],200);
+        }else{
+            return response()->json([
+                'message'=>'Old password does not matched',
+            ],400);
+        }
+
+    }
+    public function isFirstLogin($userId)
+    {
+        $user = User::find($userId);
+
+        if ($user) {
+            return $user->is_first_login;
+        }
+
+        return false; // Si l'utilisateur n'est pas trouvé, renvoyez false par défaut.
     }
 
+    public function update(Request $request, $id)
+{
+    // Validez les données de la requête
+    
+    $request->validate([
+       
+        'first_login'=>'required',
+        
+ 
+     ]);
+
+    // Récupérez l'utilisateur à mettre à jour
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+    }
+
+    // Mettez à jour les champs de l'utilisateur
+    $user->first_login = $request->input('first_login');
+    // Ajoutez d'autres champs à mettre à jour si nécessaire
+
+    // Enregistrez les modifications
+    $user->save();
+
+    return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'user' => $user]);
 }
 
 

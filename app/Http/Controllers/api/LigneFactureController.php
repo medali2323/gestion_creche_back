@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\ligne_facture;
+use App\Models\facture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -187,6 +188,33 @@ class LigneFactureController extends Controller
  }
  
  }
- 
+ public function getLignesFacture($facture_id)
+{
+    // Récupérez la facture par son ID avec les relations
+    $facture = Facture::with('lignesFacture.inscription.enfant.famille', 'lignesFacture.inscription.typeInscription')->find($facture_id);
+
+    // Vérifiez si la facture existe
+    if (!$facture) {
+        return response()->json(['message' => 'Facture non trouvée'], 404);
+    }
+
+    // Vous avez maintenant toutes les lignes de facture avec les détails de l'inscription, du type d'inscription et de l'enfant
+    return response()->json(['facture' => $facture], 200);
+}
+
+public function getDetailsLigneFacture($ligneFacture_id)
+{
+    // Récupérez la ligne de facture par son ID avec son inscription et l'enfant associé
+    $ligneFacture = ligne_facture::with('inscription.enfant.famille','inscripion.type_inscription')->find($ligneFacture_id);
+
+    // Vérifiez si la ligne de facture existe
+    if (!$ligneFacture) {
+        return response()->json(['message' => 'Ligne de facture non trouvée'], 404);
+    }
+
+    // Maintenant, $ligneFacture contient les détails de la ligne de facture, l'inscription et l'enfant associé
+    return response()->json($ligneFacture);
+}
+
  }
  

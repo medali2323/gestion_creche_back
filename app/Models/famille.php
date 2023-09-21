@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\famille;
+use App\Models\facture;
 class famille extends Model
 {
     use HasFactory;
@@ -29,13 +30,5 @@ class famille extends Model
         return $this->hasMany(enfant::class);
     }
 
-    public function factures()
-    {
-        return $this->hasManyThrough(facture::class, enfant::class)
-            ->join('inscriptions', 'facturesس.id', '=', 'inscriptions.facture_id')
-            ->join('ligne_factures', 'inscriptions.id', '=', 'ligne_factures.inscription_id')
-            ->select('facture.*')
-            ->groupBy('factures.id');
-    }
+   
 }
- 

@@ -65,7 +65,7 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::get('famille/{id}/enfants', [EnfantController::class, 'enfantformamille']);
  Route::get('famille/getBycinpere/{cinpere}/', [FamilleController::class, 'existpere']);
  Route::get('famille/getBycinmere/{cinmere}/', [FamilleController::class, 'existmere']);
- Route::get('/famille/{familleId}/factures',[FamilleController::class, 'getFactures']);
+ Route::get('/famille/{familleId}/factures',[FamilleController::class, 'getFacturesFamilleAnneeScolaire']);
 
 //Route of message
  
@@ -149,6 +149,9 @@ Route::delete('facture/{id}/delete', [FactureController::class, 'delete']);
  Route::get('ligne_facture/{id}', [LigneFactureController::class, 'getById']);
  Route::put('ligne_facture/{id}/edit', [LigneFactureController::class, 'update']);
  Route::delete('ligne_facture/{id}/delete', [LigneFactureController::class, 'delete']);
+ Route::get('getLignesFacture/{facture}', [LigneFactureController::class, 'getLignesFacture']);
+ Route::get('getDetailsLigneFacture/{id}', [LigneFactureController::class, 'getDetailsLigneFacture']);
+
 //Route of tva
 Route::get('tva', [TvaController::class, 'index']);
 Route::post('tva', [TvaController::class, 'ajouter']);
@@ -258,6 +261,8 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::post('/auth/register', [UserController::class, 'createUser']);
  Route::post('/auth/login', [UserController::class, 'loginUser']);
  Route::post('/auth/change-password',[UserController::class,'change_password'])->middleware('auth:sanctum');
+ Route::get('/check-first-login', [UserController::class, 'isFirstLogin']);
+ Route::put('users/{id}/edit', [UserController::class, 'update']);
 
 
  Route::get('/auth/users', [UserController::class, 'index']);

@@ -228,4 +228,49 @@ public function existpere($numero_cin_pere)  {
      // Faites quelque chose avec les factures (par exemple, les renvoyer en JSON)
      return response()->json(['facture' => $factures]);
  }
+
+ public function getFacturesFamilleAnneeScolaire($famille_id)
+{
+    // Récupérez la famille par son ID
+    $famille = Famille::find($famille_id);
+
+    // Vérifiez si la famille existe
+    if (!$famille) {
+        return response()->json(['message' => 'Famille non trouvée'], 404);
+    }
+
+    // Initialisez un tableau associatif pour stocker les factures uniques
+    $factures = [];
+
+    // Parcourez les enfants de la famille
+    foreach ($famille->enfants as $enfant) {
+        // Utilisez la relation pour obtenir les inscriptions de l'enfant
+        $inscriptions = $enfant->inscriptions()->get();
+
+        // Parcourez les inscriptions de l'enfant
+        foreach ($inscriptions as $inscription) {
+            // Utilisez la relation pour obtenir la ligne_facture liée à cette inscription
+            $ligneFacture = $inscription->ligneFacture;
+
+            // Si une ligne_facture est trouvée, utilisez sa relation pour obtenir la facture
+            if ($ligneFacture) {
+                $facture = $ligneFacture->facture;
+
+                // Si une facture est trouvée et n'a pas déjà été ajoutée, ajoutez-la au tableau associatif
+                if ($facture && !isset($factures[$facture->id])) {
+                    $factures[$facture->id] = $facture;
+                }
+            }
+        }
+    }
+
+    // Convertissez le tableau associatif en tableau simple si nécessaire
+    $factures = array_values($factures);
+
+    // Vous avez maintenant toutes les factures uniques de la famille
+    return response()->json(['factures' => $factures], 200);
+}
+
+ 
+ 
 }
