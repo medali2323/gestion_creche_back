@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->datetime('date_paiment');
             $table->decimal('montant_paiment', 10, 2);
-            $table->unsignedBigInteger('inscription_id')->nullable(); $table->foreign('inscription_id')->references('id')->on('inscription');
+            $table->unsignedBigInteger('facture_id')->nullable(); $table->foreign('facture_id')->references('id')->on('facture');
             $table->unsignedBigInteger('mode_paiment_id')->nullable();$table->foreign('mode_paiment_id')->references('id')->on('mode_paiment');
             $table->timestamps();
         });

@@ -94,11 +94,13 @@ class FactureController extends Controller
         'code' => 'required|string|max:50',
         'montant_total' => 'required|numeric',
         'date_facturation' => 'required|date',
-        'tva_id' => 'required'
+        'tva_id' => 'required',
+        'etat_paiment' => 'required'
+
     ]);
 
     // Trouver l'facture à mettre à jour
-    $facture = Facture::find($id);
+    $facture = facture::find($id);
 
     // Vérifier si l'facture existe
     if (!$facture) {
@@ -110,6 +112,7 @@ class FactureController extends Controller
     $facture->montant_total = $request->input('montant_total');
     $facture->date_facturation = $request->input('date_facturation');
     $facture->tva_id = $request->input('tva_id');
+    $facture->etat_paiment = $request->input('etat_paiment');
 
     $facture->updated_at = now();
 

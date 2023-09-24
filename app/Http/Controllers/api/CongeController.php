@@ -10,7 +10,7 @@ use App\Models\conge;
 class CongeController extends Controller
 {
     public function index()  {
-        $conges= conge::all();
+        $conges= conge::with('employe')->get();
         if($conges->count()>0)
          return response()->json([
              'status'=>200,
@@ -30,7 +30,7 @@ class CongeController extends Controller
       $validator= Validator::make($request->all(),[
          'code'=>'required|string|max:50',
          'date_deb'=>'required|date',
-         'date_fin '=>'required|date',
+         'date_fin'=>'required|',
          'employe_id'=>'required',
          
  
@@ -93,7 +93,7 @@ class CongeController extends Controller
      $request->validate([
         'code'=>'required|string|max:50',
         'date_deb'=>'required|date',
-        'date_fin '=>'required|date',
+        'date_fin'=>'required|date',
         'employe_id'=>'required',
         
  

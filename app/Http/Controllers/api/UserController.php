@@ -194,5 +194,46 @@ class UserController extends Controller
     return response()->json(['message' => 'Utilisateur mis à jour avec succès', 'user' => $user]);
 }
 
+public function update_profile(Request $request,$id){
+    $validator = Validator::make($request->all(), [
+        'image_users'=>'nullable|image|mimes:jpg,bmp,png'
+    ]);
+    if ($validator->fails()) {
+        return response()->json([
+            'message'=>'Validations fails',
+            'errors'=>$validator->errors()
+        ],422);
+    } 
+    $user = User::findOrFail($id);
+
+    if (!$user) {
+        return response()->json(['user' => 'User not found']);
+    }
+
+
+    if($request->hasFile('image_users')){
+        if($user->image_users){
+            $old_path=public_path().'/uploads/profile_images/'.$user->image_users;
+            if(File::exists($old_path)){
+                File::delete($old_path);
+            }
+        }
+
+        $image_name='profile-image-'.time().'.'.$request->image_users->extension();
+        $request->image_users->move(public_path('/uploads/profile_images'),$image_name);
+    }else{
+        $image_name=$user->image_users;
+    }
+
+
+    $user->update([
+        'image_users'=>$image_name
+    ]);
+
+    return response()->json([
+        'message'=>'Profile successfully updated',
+    ],200);
+}
+
 
 }

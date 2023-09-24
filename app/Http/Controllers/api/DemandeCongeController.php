@@ -9,23 +9,27 @@ use Illuminate\Support\Facades\Validator;
 
 class DemandeCongeController extends Controller
 {
-    public function index()  {
-        $demande_conges= demande_conge::all();
-        if($demande_conges->count()>0)
-         return response()->json([
-             'status'=>200,
-             'demande_conges'=>$demande_conges
-            ],200);
-        
-        else 
-         return response()->json([
-             'status'=>404,
-             'demande_conges'=>' aucun demande_conges'
-            ],404);
+    public function index()
+{
+    $demande_conges = demande_conge::with('employe')->get();
+
+    if ($demande_conges->count() > 0) {
+        return response()->json([
+            'status' => 200,
+            'demande_conges' => $demande_conges,
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'demande_conges' => 'Aucune demande de congé trouvée',
+        ], 404);
+    }
+}
+
      
      
        
-     }
+     
      public function ajouter(Request $request){
       $validator= Validator::make($request->all(),[
          'code'=>'required|string|max:50',

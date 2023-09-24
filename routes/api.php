@@ -17,6 +17,7 @@ use App\Http\Controllers\api\FamilleController;
 use App\Http\Controllers\api\MessageController;
 use App\Http\Controllers\api\activiteController;
 use App\Http\Controllers\api\documentController;
+use App\Http\Controllers\api\ActualiteController;
 use App\Http\Controllers\api\inscriptionController;
 use App\Http\Controllers\api\ModePaimentController;
 use App\Http\Controllers\api\RepasEnfantController;
@@ -110,12 +111,14 @@ Route::get('type_inscriptions/{id}', [TypeInscriptionController::class, 'getById
 Route::put('type_inscriptions/{id}/edit', [TypeInscriptionController::class, 'update']);
 Route::delete('type_inscriptions/{id}/delete', [TypeInscriptionController::class, 'delete']);
   //Route of Repas
- 
+  
   Route::get('repas', [RepasController::class, 'index']);
   Route::post('repas', [RepasController::class, 'ajouter']);
   Route::get('repas/{id}', [RepasController::class, 'getById']);
   Route::put('repas/{id}/edit', [RepasController::class, 'update']);
   Route::delete('repas/{id}/delete', [RepasController::class, 'delete']);
+  Route::post('update_repas/{id}', [RepasController::class, 'update_repas']);
+
  //Route of repas_enfant
  
  Route::get('repas_enfant', [RepasEnfantController::class, 'index']);
@@ -132,11 +135,13 @@ Route::delete('type_inscriptions/{id}/delete', [TypeInscriptionController::class
  Route::delete('mode_paiment/{id}/delete', [ModePaimentController::class, 'delete']); 
  //Route of PaimentEnfant
  
- Route::get('PaimentEnfant', [PaimentEnfantController::class, 'index']);
- Route::post('PaimentEnfant', [PaimentEnfantController::class, 'ajouter']);
- Route::get('PaimentEnfant/{id}', [PaimentEnfantController::class, 'getById']);
- Route::put('PaimentEnfant/{id}/edit', [PaimentEnfantController::class, 'update']);
- Route::delete('PaimentEnfant/{id}/delete', [PaimentEnfantController::class, 'delete']); 
+ Route::get('paimentEnfant', [PaimentEnfantController::class, 'index']);
+ Route::post('paimentEnfant', [PaimentEnfantController::class, 'ajouter']);
+ Route::get('paimentEnfant/{id}', [PaimentEnfantController::class, 'getById']);
+ Route::get('paimentEnfantbyfacture/{id}', [PaimentEnfantController::class, 'getByFactureId']);
+
+ Route::put('paimentEnfant/{id}/edit', [PaimentEnfantController::class, 'update']);
+ Route::delete('paimentEnfant/{id}/delete', [PaimentEnfantController::class, 'delete']); 
  //Route of facture
 Route::get('facture', [FactureController::class, 'index']);
 Route::post('facture', [FactureController::class, 'ajouter']);
@@ -171,7 +176,7 @@ Route::delete('tva/{id}/delete', [TvaController::class, 'delete']);
  Route::get('media', [MediaController::class, 'index']);
  Route::post('media', [MediaController::class, 'ajouter']);
  Route::get('media/{id}', [MediaController::class, 'getById']);
- Route::put('media/{id}/edit', [MediaController::class, 'update']);
+ Route::post('media/{id}/edit', [MediaController::class, 'update']);
  Route::delete('media/{id}/delete', [MediaController::class, 'delete']);
 
 
@@ -251,6 +256,14 @@ Route::post('salaire', [SalaireController::class, 'ajouter']);
 Route::get('salaire/{id}', [SalaireController::class, 'getById']);
 Route::put('salaire/{id}/edit', [SalaireController::class, 'update']);
 Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
+
+  //Route of Actualite
+ 
+  Route::get('Actualite', [ActualiteController::class, 'index']);
+  Route::post('Actualite', [ActualiteController::class, 'ajouter']);
+  Route::get('Actualite/{id}', [ActualiteController::class, 'getById']);
+  Route::put('Actualite/{id}/edit', [ActualiteController::class, 'update']);
+  Route::delete('Actualite/{id}/delete', [ActualiteController::class, 'delete']);
  //stat
  Route::get('/nb_enfants', [EnfantController::class, 'nb_enfants']);
  Route::get('/nb_employes', [employeController::class, 'nb_employes']);
@@ -263,6 +276,7 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::post('/auth/change-password',[UserController::class,'change_password'])->middleware('auth:sanctum');
  Route::get('/check-first-login', [UserController::class, 'isFirstLogin']);
  Route::put('users/{id}/edit', [UserController::class, 'update']);
+ Route::post('users/{id}/update', [UserController::class, 'update_profile']);
 
 
  Route::get('/auth/users', [UserController::class, 'index']);

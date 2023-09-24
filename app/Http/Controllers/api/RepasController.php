@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Repas;
 use Illuminate\Http\Request;
@@ -130,4 +131,48 @@ class RepasController extends Controller
  }
  
 }
+
+// ...
+
+public function update_repas(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'image_repas' => 'nullable|image|mimes:jpg,bmp,png'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation fails',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    $repas = Repas::findOrFail($id);
+
+    if (!$repas) {
+        return response()->json(['repas' => 'Repas not found']);
+    }
+
+    if ($request->hasFile('image_repas')) {
+        if ($repas->image_repas) {
+            // Supprimez l'ancienne image en utilisant Storage
+            Storage::disk('public')->delete('uploads/repas_images/' . $repas->image_repas);
+        }
+
+        // Stockez la nouvelle image en utilisant Storage
+        $image_name = 'repas-image-' . time() . '.' . $request->image_repas->getClientOriginalExtension();
+        $request->image_repas->storeAs('uploads/repas_images', $image_name, 'public');
+    } else {
+        $image_name = $repas->image_repas;
+    }
+
+    $repas->update([
+        'image_repas' => $image_name
+    ]);
+
+    return response()->json([
+        'message' => 'Profile successfully updated',
+    ], 200);
+}
+
 }

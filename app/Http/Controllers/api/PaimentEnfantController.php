@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\paiment_enfant;
 use Illuminate\Support\Facades\Validator;
 
-class Paiment_enfantController extends Controller
+class PaimentEnfantController extends Controller
 {
     //
     public function index()  {
@@ -30,10 +30,10 @@ class Paiment_enfantController extends Controller
     public function ajouter(Request $request){
      $validator= Validator::make($request->all(),[
         
-        'inscription_id'=>'required',
+        'facture_id'=>'required',
         'date_paiment'=>'required',
         'mode_paiment_id'=>'required',
-        'montant_paiment'=>'required|numiric',
+        'montant_paiment'=>'required|numeric',
 
 
 
@@ -44,7 +44,7 @@ class Paiment_enfantController extends Controller
                 'ERRORRS'=>$validator->messages() 
                ],422);
         }else {
-            $inscription_id = $request->input('inscription_id');
+            $facture_id = $request->input('facture_id');
             $date_paiment = $request->input('date_paiment');
             $mode_paiment_id = $request->input('mode_paiment_id');
             $montant_paiment = $request->input('montant_paiment');
@@ -53,7 +53,7 @@ class Paiment_enfantController extends Controller
             $paiment_enfant = new paiment_enfant();
     
             // Set the values of the model attributes
-            $paiment_enfant->inscription_id = $inscription_id;
+            $paiment_enfant->facture_id = $facture_id;
             $paiment_enfant->date_paiment = $date_paiment;
             $paiment_enfant->mode_paiment_id = $mode_paiment_id;
             $paiment_enfant->montant_paiment = $montant_paiment;
@@ -92,10 +92,10 @@ return response()->json($paiment_enfant, 200);
 {
     // Valider les données du formulaire de mise à jour
     $request->validate([
-        'inscription_id'=>'required',
+        'facture_id'=>'required',
         'date_paiment'=>'required',
         'mode_paiment_id'=>'required',
-        'montant_paiment'=>'required|numiric',
+        'montant_paiment'=>'required|numeric',
 
 
     ]);
@@ -109,7 +109,7 @@ return response()->json($paiment_enfant, 200);
     }
 
     // Mettre à jour les champs avec les nouvelles valeurs
-    $paiment_enfant->inscription_id = $request->input('inscription_id');
+    $paiment_enfant->facture_id = $request->input('facture_id');
     $paiment_enfant->date_paiment = $request->input('date_paiment');
     $paiment_enfant->mode_paiment_id = $request->input('mode_paiment_id');
     $paiment_enfant->montant_paiment = $request->input('montant_paiment');
@@ -140,4 +140,25 @@ public function delete($id)
 }
 
 }
+
+// ...
+
+public function getByFactureId($facture_id)
+{
+    // Utilisez la méthode where pour filtrer les paiements d'enfants par facture_id
+    $paimentEnfants = paiment_enfant::where('facture_id', $facture_id)->first();
+
+    if ($paimentEnfants->count() > 0) {
+        return response()->json([
+            'status' => 200,
+            'paiment_enfants' => $paimentEnfants
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Aucun paiement d\'enfant trouvé pour cette facture.'
+        ], 404);
+    }
+}
+
 }

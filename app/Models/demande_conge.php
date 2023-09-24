@@ -17,5 +17,8 @@ class demande_conge extends Model
         'employe_id'
 
     ];
-
+    public function employe()
+    {
+        return $this->belongsTo(employe::class);
+    }
 }
