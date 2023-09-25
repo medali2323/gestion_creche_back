@@ -113,11 +113,10 @@ Route::delete('type_inscriptions/{id}/delete', [TypeInscriptionController::class
   //Route of Repas
   
   Route::get('repas', [RepasController::class, 'index']);
-  Route::post('repas', [RepasController::class, 'ajouter']);
+  Route::post('repas', [RepasController::class, 'create']);
   Route::get('repas/{id}', [RepasController::class, 'getById']);
-  Route::put('repas/{id}/edit', [RepasController::class, 'update']);
+  Route::post('repas/{id}/edit', [RepasController::class, 'update_repas']);
   Route::delete('repas/{id}/delete', [RepasController::class, 'delete']);
-  Route::post('update_repas/{id}', [RepasController::class, 'update_repas']);
 
  //Route of repas_enfant
  
@@ -166,17 +165,17 @@ Route::delete('tva/{id}/delete', [TvaController::class, 'delete']);
  //Route of document
  
  Route::get('document', [documentController::class, 'index']);
- Route::post('document', [documentController::class, 'ajouter']);
+ Route::post('document', [documentController::class, 'create']);
  Route::get('document/{id}', [documentController::class, 'getById']);
- Route::post('document/{id}/edit', [documentController::class, 'update']);
+ Route::post('document/{id}/edit', [documentController::class, 'updatedocument']);
  Route::delete('document/{id}/delete', [documentController::class, 'delete']);
 
  //Route of media
  
  Route::get('media', [MediaController::class, 'index']);
- Route::post('media', [MediaController::class, 'ajouter']);
+ Route::post('media', [MediaController::class, 'create']);
  Route::get('media/{id}', [MediaController::class, 'getById']);
- Route::post('media/{id}/edit', [MediaController::class, 'update']);
+ Route::post('media/{id}/edit', [MediaController::class, 'updatemedia']);
  Route::delete('media/{id}/delete', [MediaController::class, 'delete']);
 
 

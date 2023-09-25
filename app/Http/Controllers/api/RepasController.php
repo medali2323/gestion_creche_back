@@ -134,45 +134,79 @@ class RepasController extends Controller
 
 // ...
 
-public function update_repas(Request $request, $id)
-{
+public function create(Request $request){
     $validator = Validator::make($request->all(), [
-        'image_repas' => 'nullable|image|mimes:jpg,bmp,png'
+        'libelle'=>'required|max:250',
+        'image_repas'=>'required|image|mimes:jpg,bmp,png,pdf'
     ]);
 
     if ($validator->fails()) {
         return response()->json([
-            'message' => 'Validation fails',
-            'errors' => $validator->errors()
-        ], 422);
+            'message'=>'Validation errors',
+            'errors'=>$validator->messages()
+        ],422);
     }
 
-    $repas = Repas::findOrFail($id);
+    $image_name=time().'.'.$request->image_repas->extension();
+    $request->image_repas->move(public_path('/uploads/repas_images'),$image_name);
 
-    if (!$repas) {
-        return response()->json(['repas' => 'Repas not found']);
-    }
-
-    if ($request->hasFile('image_repas')) {
-        if ($repas->image_repas) {
-            // Supprimez l'ancienne image en utilisant Storage
-            Storage::disk('public')->delete('uploads/repas_images/' . $repas->image_repas);
-        }
-
-        // Stockez la nouvelle image en utilisant Storage
-        $image_name = 'repas-image-' . time() . '.' . $request->image_repas->getClientOriginalExtension();
-        $request->image_repas->storeAs('uploads/repas_images', $image_name, 'public');
-    } else {
-        $image_name = $repas->image_repas;
-    }
-
-    $repas->update([
-        'image_repas' => $image_name
+    $repas=Repas::create([
+        'libelle'=>$request->libelle,
+        'image_repas'=>$image_name
     ]);
 
+    
     return response()->json([
-        'message' => 'Profile successfully updated',
-    ], 200);
+        'message'=>'repas successfully created',
+        'data'=>$repas
+    ],200);
+
+}
+public function updaterepas($id,Request $request){
+    $repas=Repas::findOrFail($id);
+    if($repas){
+        
+            $validator = Validator::make($request->all(), [
+                'libelle'=>'required|max:250',
+                'image_repas'=>'required|image|mimes:jpg,bmp,png,pdf'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message'=>'Validation errors',
+                    'errors'=>$validator->messages()
+                ],422);
+            }
+
+            if($request->hasFile('image_repas')){
+                $image_name=time().'.'.$request->image_repas->extension();
+                $request->image_repas->move(public_path('/uploads/repas_images'),$image_name);
+                $old_path=public_path().'/uploads/repas_images/'.$repas->image_repas;
+                if(File::exists($old_path)){
+                    File::delete($old_path);
+                }
+            }else{
+                $image_name=$repas->image_repas;
+            }
+
+            $Repas->update([
+                'libelle'=>$request->libelle,
+                'image_repas'=>$image_name
+            ]);
+
+            
+            return response()->json([
+                'message'=>'repas successfully updated',
+                'data'=>$repas
+            ],200);
+
+
+        
+    }else{
+        return response()->json([
+            'message'=>'No repas found',
+        ],400);   
+    }
 }
 
 }

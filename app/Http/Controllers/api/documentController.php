@@ -56,6 +56,84 @@ class documentController extends Controller
         }
         return response()->json($response);
     }
+    public function create(Request $request){
+        $validator = Validator::make($request->all(), [
+            'nom_document'=>'required|max:250',
+            'enfant_id'=>'required',
+            'pièce_jointe'=>'required|image|mimes:jpg,bmp,png,pdf'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message'=>'Validation errors',
+                'errors'=>$validator->messages()
+            ],422);
+        }
+
+        $image_name=time().'.'.$request->pièce_jointe->extension();
+        $request->pièce_jointe->move(public_path('/uploads/document_images'),$image_name);
+
+        $document=document::create([
+            'nom_document'=>$request->nom_document,
+            'enfant_id'=>$request->enfant_id,
+            'pièce_jointe'=>$image_name
+        ]);
+
+        
+        return response()->json([
+            'message'=>'document successfully created',
+            'data'=>$document
+        ],200);
+
+    }
+    public function updatedocument($id,Request $request){
+        $document=document::findOrFail($id);
+        if($document){
+            
+                $validator = Validator::make($request->all(), [
+                    'nom_document'=>'required|max:250',
+                    'enfant_id'=>'required',
+                    'pièce_jointe'=>'required|image|mimes:jpg,bmp,png,pdf'
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'message'=>'Validation errors',
+                        'errors'=>$validator->messages()
+                    ],422);
+                }
+
+                if($request->hasFile('pièce_jointe')){
+                    $image_name=time().'.'.$request->pièce_jointe->extension();
+                    $request->pièce_jointe->move(public_path('/uploads/document_images'),$image_name);
+                    $old_path=public_path().'/uploads/document_images/'.$document->pièce_jointe;
+                    if(File::exists($old_path)){
+                        File::delete($old_path);
+                    }
+                }else{
+                    $image_name=$document->pièce_jointe;
+                }
+
+                $document->update([
+                    'nom_document'=>$request->nom_document,
+                    'enfant_id'=>$request->enfant_id,
+                    'pièce_jointe'=>$image_name
+                ]);
+
+                
+                return response()->json([
+                    'message'=>'document successfully updated',
+                    'data'=>$document
+                ],200);
+
+
+            
+        }else{
+            return response()->json([
+                'message'=>'No document found',
+            ],400);   
+        }
+    }
     public function index()  {
         $documents= document::all();
         if($documents->count()>0)

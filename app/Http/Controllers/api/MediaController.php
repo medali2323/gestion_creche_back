@@ -147,4 +147,82 @@ class MediaController extends Controller
           200);
      }
     }
+    public function create(Request $request){
+        $validator = Validator::make($request->all(), [
+            'nom'=>'required|max:250',
+            'enfant_id'=>'required',
+            'pièce_jointe'=>'required|image|mimes:jpg,bmp,png,pdf'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message'=>'Validation errors',
+                'errors'=>$validator->messages()
+            ],422);
+        }
+
+        $image_name=time().'.'.$request->pièce_jointe->extension();
+        $request->pièce_jointe->move(public_path('/uploads/media_images'),$image_name);
+
+        $media=media::create([
+            'nom'=>$request->nom,
+            'enfant_id'=>$request->enfant_id,
+            'pièce_jointe'=>$image_name
+        ]);
+
+        
+        return response()->json([
+            'message'=>'media successfully created',
+            'data'=>$media
+        ],200);
+
+    }
+    public function updatemedia($id,Request $request){
+        $media=media::findOrFail($id);
+        if($media){
+            
+                $validator = Validator::make($request->all(), [
+                    'nom'=>'required|max:250',
+                    'enfant_id'=>'required',
+                    'pièce_jointe'=>'required|image|mimes:jpg,bmp,png,pdf'
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'message'=>'Validation errors',
+                        'errors'=>$validator->messages()
+                    ],422);
+                }
+
+                if($request->hasFile('pièce_jointe')){
+                    $image_name=time().'.'.$request->pièce_jointe->extension();
+                    $request->pièce_jointe->move(public_path('/uploads/media_images'),$image_name);
+                    $old_path=public_path().'/uploads/media_images/'.$media->pièce_jointe;
+                    if(File::exists($old_path)){
+                        File::delete($old_path);
+                    }
+                }else{
+                    $image_name=$media->pièce_jointe;
+                }
+
+                $media->update([
+                    'nom'=>$request->nom,
+                    'enfant_id'=>$request->enfant_id,
+                    'pièce_jointe'=>$image_name
+                ]);
+
+                
+                return response()->json([
+                    'message'=>'media successfully updated',
+                    'data'=>$media
+                ],200);
+
+
+            
+        }else{
+            return response()->json([
+                'message'=>'No media found',
+            ],400);   
+        }
+    }
 }
