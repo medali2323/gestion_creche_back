@@ -235,5 +235,15 @@ public function update_profile(Request $request,$id){
     ],200);
 }
 
+public function getById($id){
+    $user = User::find($id);
 
+    if (!$user) {
+       return response()->json(
+           [ 'status'=>404,
+           'message' => 'user non trouvé'
+       ], 404);
+}
+return response()->json($user, 200);
+}
 }

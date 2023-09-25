@@ -276,6 +276,7 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::get('/check-first-login', [UserController::class, 'isFirstLogin']);
  Route::put('users/{id}/edit', [UserController::class, 'update']);
  Route::post('users/{id}/update', [UserController::class, 'update_profile']);
+ Route::get('users/{id}', [UserController::class, 'getById']);
 
 
  Route::get('/auth/users', [UserController::class, 'index']);
