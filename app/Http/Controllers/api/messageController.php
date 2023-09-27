@@ -11,8 +11,8 @@ class MessageController extends Controller
 {
     //
     public function index()  {
-       $messages= message::all();
-       if($messages->count()>0)
+        $messages = Message::with('famille')->get();
+        if($messages->count()>0)
         return response()->json([
             'status'=>200,
             'messages'=>$messages
