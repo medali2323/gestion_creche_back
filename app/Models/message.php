@@ -17,9 +17,9 @@ class message extends Model
         'etat'
 
     ];
-    public function classe()
-{
-    return $this->belongsTo(Classe::class);
-}
+    public function famille()
+    {
+        return $this->belongsTo(famille::class, 'famille_id');
+    }
 }
  
