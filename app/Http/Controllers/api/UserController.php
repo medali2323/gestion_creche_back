@@ -170,12 +170,7 @@ class UserController extends Controller
 {
     // Validez les données de la requête
     
-    $request->validate([
-       
-        'first_login'=>'required',
-        
- 
-     ]);
+  
 
     // Récupérez l'utilisateur à mettre à jour
     $user = User::find($id);
