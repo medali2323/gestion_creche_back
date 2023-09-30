@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Models\facture;
 use App\Models\famille;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -239,37 +241,23 @@ public function existpere($numero_cin_pere)  {
         return response()->json(['message' => 'Famille non trouvée'], 404);
     }
 
-    // Initialisez un tableau associatif pour stocker les factures uniques
-    $factures = [];
+    // Utilisez une sous-requête pour obtenir les IDs des factures liées à la famille
+    $factureIds = DB::table('inscription')
+        ->join('ligne_facture', 'inscription.id', '=', 'ligne_facture.inscription_id')
+        ->join('facture', 'ligne_facture.facture_id', '=', 'facture.id')
+        ->whereIn('inscription.enfant_id', $famille->enfants->pluck('id'))
+        ->distinct()
+        ->pluck('facture.id');
 
-    // Parcourez les enfants de la famille
-    foreach ($famille->enfants as $enfant) {
-        // Utilisez la relation pour obtenir les inscriptions de l'enfant
-        $inscriptions = $enfant->inscriptions()->get();
+    // Récupérez les factures correspondantes à ces IDs
+    $factures = facture::whereIn('id', $factureIds)->get();
 
-        // Parcourez les inscriptions de l'enfant
-        foreach ($inscriptions as $inscription) {
-            // Utilisez la relation pour obtenir la ligne_facture liée à cette inscription
-            $ligneFacture = $inscription->ligneFacture;
-
-            // Si une ligne_facture est trouvée, utilisez sa relation pour obtenir la facture
-            if ($ligneFacture) {
-                $facture = $ligneFacture->facture;
-
-                // Si une facture est trouvée et n'a pas déjà été ajoutée, ajoutez-la au tableau associatif
-                if ($facture && !isset($factures[$facture->id])) {
-                    $factures[$facture->id] = $facture;
-                }
-            }
-        }
-    }
-
-    // Convertissez le tableau associatif en tableau simple si nécessaire
-    $factures = array_values($factures);
-
-    // Vous avez maintenant toutes les factures uniques de la famille
+    // Vous avez maintenant toutes les factures uniques liées à la famille
     return response()->json(['factures' => $factures], 200);
 }
+
+
+ 
 
  
  
