@@ -29,6 +29,8 @@ use App\Http\Controllers\api\PaimentEnfantController;
 use App\Http\Controllers\api\activiteEnfantController;
 use App\Http\Controllers\api\PointageEnfantController;
 use App\Http\Controllers\api\TypeInscriptionController;
+use App\Http\Controllers\api\forgetpasswordcontroller;
+use App\Http\Controllers\api\resetingpasswordcontroller;
 
 
 /*
@@ -278,5 +280,8 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::post('users/{id}/update', [UserController::class, 'update_profile']);
  Route::get('users/{id}', [UserController::class, 'getById']);
 
+
+ Route::post('password/forgot-password', [forgetpasswordcontroller::class, 'forgotPassword']); 
+ Route::post('password/reset', [resetingpasswordcontroller::class, 'passwordReset']); 
 
  Route::get('/auth/users', [UserController::class, 'index']);

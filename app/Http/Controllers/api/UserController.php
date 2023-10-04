@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use File;
+use App\Notifications\emailverificationnotification;
 class UserController extends Controller
 {
     /**
@@ -50,7 +51,8 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                $user->notify(new emailverificationnotification())
             ], 200);
 
         } catch (\Throwable $th) {
