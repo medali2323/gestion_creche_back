@@ -31,7 +31,9 @@ class FactureController extends Controller
          'code'=>'required|string|max:50',
          'montant_total' => 'required|numeric',
          'date_facturation' => 'required|date',
-         'tva_id'=>'required'
+         'tva_id'=>'required',
+         'etat_paiment' => 'required'
+
  
       ]); 
          if ($validator->fails()) {
@@ -44,7 +46,8 @@ class FactureController extends Controller
              $montant_total = $request->input('montant_total');
              $date_facturation = $request->input('date_facturation');
              $tva_id = $request->input('tva_id');
-          
+             $etat_paiment = $request->input('etat_paiment');
+
              // Create a new instance of the facture model
              $facture = new facture();
      
@@ -53,7 +56,8 @@ class FactureController extends Controller
              $facture->montant_total = $montant_total;
              $facture->date_facturation = $date_facturation;
              $facture->tva_id = $tva_id;
-            
+             $facture->etat_paiment = $etat_paiment;
+
  
              $facture->updated_at = now();
              $facture->created_at = now();
