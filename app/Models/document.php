@@ -15,9 +15,9 @@ class document extends Model
         'enfant_id'
 
     ];
-    public function classe()
-{
-    return $this->belongsTo(Classe::class);
-}
+    public function enfant()
+    {
+        return $this->belongsTo(enfant::class, 'enfant_id');
+    }
 }
  

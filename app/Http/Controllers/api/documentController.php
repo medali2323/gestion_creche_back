@@ -135,7 +135,8 @@ class documentController extends Controller
         }
     }
     public function index()  {
-        $documents= document::all();
+
+        $documents= document::with('enfant')->get();
         if($documents->count()>0)
          return response()->json([
              'status'=>200,

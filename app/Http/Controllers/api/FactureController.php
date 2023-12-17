@@ -147,5 +147,16 @@ class FactureController extends Controller
  }
  
  }
+ 
+    public function nvcodefacture()
+{
+    $lastFactureId = facture::max('id') + 1;
+    $currentYear = date('Y');
+    $lastTwoDigits = substr($currentYear, -2);
+
+    $combinedResult = "FV ". $lastTwoDigits ."-". $lastFactureId;
+
+    return response()->json(['nvcodefacture' => $combinedResult]);
+}
  }
  

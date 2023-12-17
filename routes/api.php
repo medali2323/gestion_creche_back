@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum','role:admin')->group( function () {
  Route::get('enfants/{id}/document', [documentController::class, 'documentforenfant']);
  Route::get('enfants/{id}/activite', [activiteEnfantController::class, 'activiteforenfant']);
  Route::get('enfants/{id}/pointage', [PointageEnfantController::class, 'pointageforenfant']);
+ Route::get('enfants/{id}/repas', [RepasEnfantController::class, 'repasforenfant']);
 
  Route::post('enfants', [EnfantController::class, 'ajouter']);
  Route::put('enfants/{id}/edit', [EnfantController::class, 'update']);
@@ -269,7 +270,10 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
  Route::get('/nb_enfants', [EnfantController::class, 'nb_enfants']);
  Route::get('/nb_employes', [employeController::class, 'nb_employes']);
  Route::get('/nb_familles', [FamilleController::class, 'nb_familles']);
+ 
+ Route::get('/nvcodefacture', [FactureController::class, 'nvcodefacture']);
 
+ 
 // register ,login,logout
  Route::post('/auth/logout', [UserController::class, 'logout']);
  Route::post('/auth/register', [UserController::class, 'createUser']);

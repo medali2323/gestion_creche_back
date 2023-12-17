@@ -133,19 +133,40 @@ class RepasEnfantController extends Controller
  
  }
  public function repasforenfant($idenf)  {
-    $repas_enfants= repas_enfant::where('enfant',$idenf)->get();
-    if($repas_enfants->count()>0)
-     return response()->json([
-         'status'=>200,
-         'repas_enfants'=>$repas_enfants
-        ],200);
-    
-    else 
-     return response()->json([
-         'status'=>404,
-         'repas_enfants'=>' aucun repas_enfants for enfant'
-        ],404);
- }
+    // Supposons que vous ayez une relation repas dans votre modèle repas_enfant
+    $repas_enfants = repas_enfant::whereHas('inscription', function($query) use ($idenf) {
+        $query->where('enfant_id', $idenf);
+    })->get();
+
+    if($repas_enfants->count() > 0) {
+        $repasDetails = [];
+
+        foreach ($repas_enfants as $repas_enfant) {
+            // Vérifiez si la relation repas est définie
+            if ($repas_enfant->repas) {
+                // Ajoutez les détails du repas au tableau
+                $repasDetails[] = [
+                    'repas_enfant_id' => $repas_enfant->id,
+                    'repas_id' => $repas_enfant->repas->id,
+                    'libelle' => $repas_enfant->repas->libelle,
+                    // ... Ajoutez d'autres champs du repas que vous souhaitez inclure
+                ];
+            }
+        }
+        
+
+        return response()->json([
+            'status' => 200,
+            'repas_details' => $repasDetails
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'repas_details' => 'Aucun repas trouvé pour cet enfant'
+        ], 404);
+    }
+}
+
  
 }
 
