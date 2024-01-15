@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 class ActualiteController extends Controller
 {
+    
     public function ajouter(Request $request) {
         $imagesName = [];
         $response = [];
@@ -88,38 +89,44 @@ class ActualiteController extends Controller
        
      
 
+
      public function update(Request $request, $id)
      {
-         $Actualite = Actualite::findOrFail($id);
+         try {
+             $actualite = Actualite::findOrFail($id);
      
-         // Définissez un chemin de destination pour le téléchargement de la pièce jointe
-         $destination = public_path("uploads/actualite" . $Actualite->pièce_jointe);
+             // Définissez un chemin de destination pour le téléchargement de la pièce jointe
+             $destination = public_path("uploads/actualite/" . $actualite->piece_jointe);
      
-         // Initialisez une variable pour le nom de fichier
-         $filename = $Actualite->pièce_jointe;
+             // Initialisez une variable pour le nom de fichier
+             $filename = $actualite->piece_jointe;
      
-         if ($request->hasFile('pièce_jointe')) {
-             // Si une nouvelle pièce jointe est fournie, supprimez l'ancienne
-             if (File::exists($destination)) {
-                 File::delete($destination);
+             if ($request->hasFile('piece_jointe')) {
+                 // Si une nouvelle pièce jointe est fournie, supprimez l'ancienne
+                 if (File::exists($destination)) {
+                     File::delete($destination);
+                 }
+     
+                 // Téléchargez la nouvelle pièce jointe
+                 $filename = $request->file('piece_jointe')->store('posts', 'public');
              }
      
-             // Téléchargez la nouvelle pièce jointe
-             $filename = $request->file('pièce_jointe')->store('posts', 'public');
-         }
+             // Mettez à jour les autres champs
+             $actualite->objet = $request->objet;
+             $actualite->date = $request->date; // Assurez-vous que le format de la date est correct
+             $actualite->contenu = $request->contenu;
+             $actualite->piece_jointe = $filename;
      
-         // Mettez à jour les autres champs
-         $Actualite->objet = $request->objet;
-         $Actualite->date = $request->date;
-         $Actualite->contenu = $request->contenu;
-         $Actualite->pièce_jointe = $filename;
+             $result = $actualite->save();
      
-         $result = $Actualite->save();
-     
-         if ($result) {
-             return response()->json(['success' => true]);
-         } else {
-             return response()->json(['success' => false]);
+             if ($result) {
+                 return response()->json(['success' => true]);
+             } else {
+                 return response()->json(['success' => false]);
+             }
+         } catch (\Exception $e) {
+             // En cas d'erreur, retournez une réponse d'erreur
+             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
          }
      }
      
@@ -149,5 +156,7 @@ class ActualiteController extends Controller
                'message' => 'Actualite non trouvé'
            ], 404);
     }
+    
 }
+
 }

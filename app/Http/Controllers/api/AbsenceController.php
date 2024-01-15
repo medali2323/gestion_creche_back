@@ -143,5 +143,33 @@ class AbsenceController extends Controller
  }
  
  }
+
+
+public function absencebydate($date) {
+    // Vérifier si la date a été fournie
+    if (!$date) {
+        return response()->json([
+            'status' => 400,
+            'message' => 'Veuillez fournir une date valide.',
+        ], 400);
+    }
+
+    // Récupérer les absences pour la date spécifiée
+    $absences = absence::where('date_absence', $date)->get();
+
+    // Vérifier si des absences ont été trouvées
+    if ($absences->count() > 0) {
+        return response()->json([
+            'status' => 200,
+            'absences' => $absences,
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Aucune absence trouvée pour la date spécifiée.',
+        ], 404);
+    }
+}
+
  }
  

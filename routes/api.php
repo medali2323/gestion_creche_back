@@ -251,6 +251,8 @@ Route::post('absenceController', [AbsenceController::class, 'ajouter']);
 Route::get('absenceController/{id}', [AbsenceController::class, 'getById']);
 Route::put('absenceController/{id}/edit', [AbsenceController::class, 'update']);
 Route::delete('absenceController/{id}/delete', [AbsenceController::class, 'delete']);
+Route::get('absences/{date}/', [AbsenceController::class, 'absencebydate']);
+
 //Route of salaire
  
 Route::get('salaire', [SalaireController::class, 'index']);
@@ -264,7 +266,7 @@ Route::delete('salaire/{id}/delete', [SalaireController::class, 'delete']);
   Route::get('Actualite', [ActualiteController::class, 'index']);
   Route::post('Actualite', [ActualiteController::class, 'ajouter']);
   Route::get('Actualite/{id}', [ActualiteController::class, 'getById']);
-  Route::put('Actualite/{id}/edit', [ActualiteController::class, 'update']);
+  Route::post('Actualite/{id}/edit', [ActualiteController::class, 'update']);
   Route::delete('Actualite/{id}/delete', [ActualiteController::class, 'delete']);
  //stat
  Route::get('/nb_enfants', [EnfantController::class, 'nb_enfants']);

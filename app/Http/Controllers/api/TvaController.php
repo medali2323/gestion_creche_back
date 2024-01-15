@@ -81,14 +81,12 @@ class TvaController extends Controller
  
  return response()->json($tva, 200);
  }
-     public function update(Request $request, $id)
+ public function update(Request $request, $id)
  {
      // Valider les données du formulaire de mise à jour
      $request->validate([
-        'code'=>'required|string|max:50',
-        'taux_tva' => 'required|numeric',
-    
- 
+         'code' => 'required|string|max:50',
+         'taux_tva' => 'required|numeric',
      ]);
  
      // Trouver l'tva à mettre à jour
@@ -100,9 +98,9 @@ class TvaController extends Controller
      }
  
      // Mettre à jour les champs avec les nouvelles valeurs
-     $tva->code = $code;
-     $tva->taux_tva = $taux_tva;
-     
+     $tva->code = $request->input('code');
+     $tva->taux_tva = $request->input('taux_tva');
+ 
      $tva->updated_at = now();
  
      // Sauvegarder les modifications
@@ -110,10 +108,11 @@ class TvaController extends Controller
  
      // Retourner la réponse avec l'tva mis à jour
      return response()->json([
-         'message' => 'tva mis à jour avec succès', 
+         'message' => 'tva mis à jour avec succès',
          'tva' => $tva
      ]);
  }
+ 
  public function delete($id)
  {
   $tva = tva::find($id);
