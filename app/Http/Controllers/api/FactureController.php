@@ -148,5 +148,17 @@ class FactureController extends Controller
 
     return response()->json(['nvcodefacture' => $combinedResult]);
 }
+public function getById($id){
+    $facture = facture::find($id);
+
+    if (!$facture) {
+       return response()->json(
+           [ 'status'=>404,
+           'message' => 'facture non trouvé'
+       ], 404);
+}
+
+return response()->json($facture, 200);
+}
  }
  
